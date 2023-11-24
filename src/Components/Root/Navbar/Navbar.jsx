@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-//import useAuth from "../../Hooks/useAuth";
+import useAuth from "../../../Hooks/useAuth";
 
 const Navbar = () => {
-    // const { user, logOut } = useAuth();
+    const { user, logOut } = useAuth();
     // console.log(user);
 
     //Theme Setup
@@ -21,17 +21,16 @@ const Navbar = () => {
         }
     }
 
-    /*  const handleSignOut = () => {
-         logOut()
-             .then()
-             .catch()
-     } */
+    const handleSignOut = () => {
+        logOut()
+            .then()
+            .catch()
+    }
 
     const links = <>
         <li><NavLink to="/">Home</NavLink></li>
         <li><NavLink to="/dashboard">Dashboard</NavLink></li>
         <li><NavLink to="/aboutUs">About Us</NavLink></li>
-
     </>
     return (
         <div className="bg-teal-300 font-semibold">
@@ -56,9 +55,9 @@ const Navbar = () => {
                     </ul>
                 </div>
 
-                {<div className="navbar-end">
+                <div className="navbar-end">
 
-                    {/*  {user?.email ? (
+                    {user?.email ? (
                         <div className="dropdown dropdown-end ">
                             <label tabIndex={0} className="cursor-pointer">
                                 <div className="avatar">
@@ -73,23 +72,12 @@ const Navbar = () => {
                             >
                                 <h1 className="px-4 py-2 font-bold text-right">{user.displayName}</h1>
                                 <NavLink
-                                    to="/addFood"
+                                    to="/dashboard"
                                     className="px-4 py-2 hover:bg-base-300 rounded-lg text-right"
                                 >
-                                    Add Food
+                                    Dashboard
                                 </NavLink>
-                                <NavLink
-                                    to="/myAddedFoods"
-                                    className="px-4 py-2 hover:bg-base-300 rounded-lg text-right"
-                                >
-                                    My Added Foods
-                                </NavLink>
-                                <NavLink
-                                    to="/myOrderedFoods"
-                                    className="px-4 py-2 hover:bg-base-300 rounded-lg text-right"
-                                >
-                                    My Ordered Foods
-                                </NavLink>
+
 
                                 <div
                                     onClick={handleSignOut}
@@ -103,12 +91,12 @@ const Navbar = () => {
                         <NavLink
                             to="/login"
                             className={({ isActive }) =>
-                                isActive ? 'btn btn-primary  btn-sm' : 'btn btn-error btn-outline btn-sm'
+                                isActive ? 'btn btn-error  btn-sm' : 'btn btn-active btn-ghost btn-sm'
                             }
                         >
                             Login
                         </NavLink>
-                    )} */}
+                    )}
 
 
 
@@ -127,7 +115,7 @@ const Navbar = () => {
 
                         </label>
                     </div>
-                </div>}
+                </div>
 
             </div>
         </div>

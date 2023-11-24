@@ -9,7 +9,7 @@ const TopDeliveryMan = () => {
         fetch('http://localhost:5000/deliveryMan')
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+
                 const sortedDeliveryMen = data.sort((a, b) => b.averageRating - a.averageRating);
                 const top5DeliveryMan = sortedDeliveryMen.slice(0, 5);
                 setTopDeliveryMen(top5DeliveryMan)

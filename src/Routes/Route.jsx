@@ -4,6 +4,8 @@ import ErrorPage from "../Components/Root/ErrorPage/ErrorPage";
 import Home from "../Components/Home/Home";
 import Dashboard from "../Components/Dashboard/Dashboard";
 import AboutUs from "../Components/AboutUs/AboutUs";
+import LogIn from "../Components/Authentication/Login";
+import SignUp from "../Components/Authentication/SignUp";
 
 
 const Route = createBrowserRouter([
@@ -23,6 +25,14 @@ const Route = createBrowserRouter([
             {
                 path: '/aboutUs',
                 element: <AboutUs></AboutUs>,
+            },
+            {
+                path: '/login',
+                element: <LogIn></LogIn>,
+            },
+            {
+                path: '/signUp',
+                element: <SignUp></SignUp>,
             },
         ]
     },
