@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Lottie from "lottie-react";
-import logIn from "../../../public/login.json";
+import logIn from "../../assets/login.json";
 
 //import axios from "axios";
 

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Swal from 'sweetalert2';
 import Lottie from "lottie-react";
-import signUp from "../../../public/signUp.json";
+import signUp from "../../assets/signUp.json";
 import { updateProfile } from "firebase/auth";
 
 

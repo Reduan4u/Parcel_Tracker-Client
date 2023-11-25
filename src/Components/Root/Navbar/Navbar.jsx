@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { MdNotificationAdd } from "react-icons/md";
 import useAuth from "../../../Hooks/useAuth";
 
 const Navbar = () => {
@@ -55,8 +56,12 @@ const Navbar = () => {
                     </ul>
                 </div>
 
-                <div className="navbar-end">
-
+                <div className="navbar-end space-x-3">
+                    <div>
+                        <button className="">
+                            <div className="badge py-6 bg-transparent text-2xl rounded-full border-black"><MdNotificationAdd></MdNotificationAdd><span className="text-red-400 font-bold pb-2">**</span></div>
+                        </button>
+                    </div>
                     {user?.email ? (
                         <div className="dropdown dropdown-end ">
                             <label tabIndex={0} className="cursor-pointer">
@@ -102,7 +107,7 @@ const Navbar = () => {
 
 
                     <div className="">
-                        <label className="swap swap-rotate px-2">
+                        <label className="swap swap-rotate">
 
                             {/* this hidden checkbox controls the state */}
                             <input type="checkbox"

@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import SectionTitle from "../../Components/SectionTitle/SectionTitle";
 import DeliveryManCard from "./DeliveryManCard";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
 
 const TopDeliveryMan = () => {
+    const axiosInstance = useAxiosPublic();
     const [topDeliveryMen, setTopDeliveryMen] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:5000/deliveryMan')
-            .then(res => res.json())
-            .then(data => {
-
+        axiosInstance.get('/deliveryMan')
+            .then(res => {
+                const data = res.data;
                 const sortedDeliveryMen = data.sort((a, b) => b.averageRating - a.averageRating);
                 const top5DeliveryMan = sortedDeliveryMen.slice(0, 5);
                 setTopDeliveryMen(top5DeliveryMan)
@@ -17,7 +18,7 @@ const TopDeliveryMan = () => {
             .catch(error => {
                 console.error('Error fetching data:', error);
             });
-    }, [])
+    }, [axiosInstance]);
 
     return (
         <div className="my-10">
