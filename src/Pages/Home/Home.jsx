@@ -1,7 +1,7 @@
-import Banner from "../../Pages/Banner/Banner";
-import Features from "../../Pages/Features/Features";
-import Statistics from "../../Pages/Statistics/Statistics";
-import TopDeliveryMan from "../../Pages/TopDeliveryMan/TopDeliveryMan";
+import Banner from "./Banner/Banner";
+import Features from "./Features/Features";
+import Statistics from "./Statistics/Statistics";
+import TopDeliveryMan from "./TopDeliveryMan/TopDeliveryMan";
 import { Helmet } from 'react-helmet-async';
 {/* <Helmet>
     <title>Parcel Tracker | Home</title>

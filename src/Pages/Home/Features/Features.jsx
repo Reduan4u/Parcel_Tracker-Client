@@ -1,4 +1,4 @@
-import SectionTitle from "../../Components/SectionTitle/SectionTitle";
+import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
 
 const Features = () => {
     return (

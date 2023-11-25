@@ -31,7 +31,7 @@ const Navbar = () => {
     const links = <>
         <li><NavLink to="/">Home</NavLink></li>
         <li><NavLink to="/dashboard">Dashboard</NavLink></li>
-        <li><NavLink to="/aboutUs">About Us</NavLink></li>
+        <li><NavLink to="/contact">Contact</NavLink></li>
     </>
     return (
         <div className="bg-teal-300 font-semibold">
@@ -94,7 +94,7 @@ const Navbar = () => {
                         </div>
                     ) : (
                         <NavLink
-                            to="/login"
+                            to="/logIn"
                             className={({ isActive }) =>
                                 isActive ? 'btn btn-error  btn-sm' : 'btn btn-active btn-ghost btn-sm'
                             }

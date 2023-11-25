@@ -88,12 +88,13 @@ const SignUp = () => {
 
     return (
         <div>
-            <div className="hero min-h-screen w-10/12 m-auto  py-10">
+            <div className="hero min-h-screen w-10/12 m-auto my-10">
                 <div className="hero-content flex-col lg:flex-row-reverse">
-                    <div className="text-center ">
+                    <div className="text-center lg:text-left flex-1 ">
                         <Lottie animationData={signUp} loop={true} />
                     </div>
-                    <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+                    <div className="flex-1 card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+
                         <div className="card-body">
                             <h1 className="text-5xl font-bold py-4">SignUp now!</h1>
                             <form onSubmit={handleSignUp}>
@@ -154,7 +155,7 @@ const SignUp = () => {
                                 </p>
                             }
 
-                            <p className="text-center">Already have an Account? Please, <strong><Link to="/login" className="underline  underline-offset-4">Log In</Link> </strong></p>
+                            <p className="text-center">Already have an Account? Please, <strong><Link to="/logIn" className="underline  underline-offset-4">Log In</Link> </strong></p>
                         </div>
                     </div>
                 </div>

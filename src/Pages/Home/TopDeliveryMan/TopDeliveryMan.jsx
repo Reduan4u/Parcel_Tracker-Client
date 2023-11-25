@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import SectionTitle from "../../Components/SectionTitle/SectionTitle";
+import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
 import DeliveryManCard from "./DeliveryManCard";
-import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 
 const TopDeliveryMan = () => {
     const axiosInstance = useAxiosPublic();

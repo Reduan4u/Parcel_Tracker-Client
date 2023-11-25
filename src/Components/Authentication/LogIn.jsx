@@ -108,10 +108,10 @@ const LogIn = () => {
         <div >
             <div className="hero min-h-screen w-10/12 m-auto">
                 <div className="hero-content flex-col lg:flex-row-reverse">
-                    <div className="text-center lg:text-left">
+                    <div className="flex-1 text-center lg:text-left">
                         <Lottie animationData={logIn} loop={true} />
                     </div>
-                    <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+                    <div className="flex-1 card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                         <h1 className="text-5xl font-bold text-center">LogIn now!</h1>
 
                         <div className="card-body">
