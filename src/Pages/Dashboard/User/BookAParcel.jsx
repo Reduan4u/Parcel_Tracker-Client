@@ -44,8 +44,9 @@ const BookAParcel = () => {
         const addressLongitude = form.elements.addressLongitude.value;
         const deliveryDate = form.elements.deliveryDate.value;
         const parcelCost = form.elements.parcelCost.value;
+        const bookingDate = new Date();
 
-        const newParcel = { senderName, senderEmail, senderNumber, parcelWeight, parcelType, receiverName, receiverNumber, receiverAddress, addressLatitude, addressLongitude, deliveryDate, parcelCost, };
+        const newParcel = { senderName, senderEmail, senderNumber, parcelWeight, parcelType, receiverName, receiverNumber, receiverAddress, addressLatitude, addressLongitude, deliveryDate, parcelCost, bookingDate };
         console.log(newParcel);
 
         axiosInstance.post('/parcel', newParcel)
@@ -120,7 +121,7 @@ const BookAParcel = () => {
                                 </div>
 
                                 <div className="flex">
-                                    <div className="w-1/3 pr-2">
+                                    <div className="w-2/5 pr-2">
                                         <label className=" font-bold pl-1">Weight:</label>
                                         <input required
                                             name="parcelWeight"
@@ -198,16 +199,16 @@ const BookAParcel = () => {
                                                     className=" text-black font-medium w-full px-4 py-2.5  text-base   transition duration-500 ease-in-out transform.elements border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" />
                                             </div>
                                         </div>
-                                        <div className="flex space-x-2">
-                                            <div className="">
-                                                <label className=" font-bold pl-1">Requested Delivery Date:</label>
+                                        <div className="flex justify-center items-center space-x-2">
+                                            <div className="w-1/2">
+                                                <label className=" font-bold pl-1">Requested Delivery:</label>
                                                 <input required
                                                     name="deliveryDate"
                                                     placeholder="i.e 21.121365496"
                                                     type="date"
                                                     className=" text-black font-medium w-full px-4 py-2.5  text-base   transition duration-500 ease-in-out transform.elements border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" />
                                             </div>
-                                            <div className="">
+                                            <div className="w-1/2">
                                                 <label className=" font-bold pl-1">Cost:</label>
                                                 <input required
                                                     name="parcelCost"
