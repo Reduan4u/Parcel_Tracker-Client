@@ -28,7 +28,12 @@ const BookAParcel = () => {
         }
         return 0;
     }
-
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(today.getDate()).padStart(2, '0');
+    const bookingDate = `${year}-${month}-${day}`;
+    //console.log(bookingDate);
 
 
     const handleBook = event => {
@@ -44,9 +49,14 @@ const BookAParcel = () => {
         const addressLongitude = form.elements.addressLongitude.value;
         const deliveryDate = form.elements.deliveryDate.value;
         const parcelCost = form.elements.parcelCost.value;
-        const bookingDate = new Date();
+        const bookingStatus = "pending";
+        const approximateDeliveryDate = form.elements.deliveryDate.value;
+        const deliveryMenId = "";
 
-        const newParcel = { senderName, senderEmail, senderNumber, parcelWeight, parcelType, receiverName, receiverNumber, receiverAddress, addressLatitude, addressLongitude, deliveryDate, parcelCost, bookingDate };
+
+
+
+        const newParcel = { senderName, senderEmail, senderNumber, parcelWeight, parcelType, receiverName, receiverNumber, receiverAddress, addressLatitude, addressLongitude, deliveryDate, parcelCost, bookingDate, bookingStatus, approximateDeliveryDate, deliveryMenId };
         console.log(newParcel);
 
         axiosInstance.post('/parcel', newParcel)

@@ -1,12 +1,14 @@
 import { Navigate, useLocation } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
+import useDeliveryMen from "../Hooks/useDeliveryMen";
 
 
-const PrivateRoute = ({ children }) => {
+const DeliveryMenRoute = ({ children }) => {
     const { user, loading } = useAuth();
+    const [isDeliveryMen, isDeliveryMenLoading] = useDeliveryMen();
     const location = useLocation();
 
-    if (loading) {
+    if (loading || isDeliveryMenLoading) {
         return <div className="py-20">
             <div className="flex flex-col rounded shadow-md w-60 m-auto sm:w-80 animate-pulse h-96">
                 <div className="h-48 rounded-t dark:bg-gray-700"></div>
@@ -19,10 +21,12 @@ const PrivateRoute = ({ children }) => {
         </div>
     }
 
-    if (user) {
+    if (user && isDeliveryMen) {
         return children;
     }
-    return <Navigate state={location.pathname} to='/login'></Navigate>
+
+    return <Navigate to="/" state={{ from: location }} replace></Navigate>
+
 };
 
-export default PrivateRoute;
+export default DeliveryMenRoute;

@@ -64,25 +64,7 @@ const AllParcel = () => {
             // Handle error
         });
     };
-    const handleSearchByDateRange = () => {
-        // Make API call to search by date range
-        axiosSecure.get('/parcel', {
-            params: {
-                fromDate: fromDate,
-                toDate: toDate,
-            },
-        }).then(response => {
-            // Filter parcels based on requested delivery date
 
-            setParcels(response.data);
-            console.log(response.data);
-        }).catch(error => {
-            console.error('Error searching by date range:', error);
-            // Handle error
-        });
-    };
-
-    //console.log(parcels);
 
     return (
         <div className="container mx-auto mt-8">
@@ -112,7 +94,7 @@ const AllParcel = () => {
                     />
                 </div>
                 <div>
-                    <button className='btn btn-info' onClick={handleSearchByDateRange}>Search</button>
+                    <button className='btn btn-info' onClick={"handleSearchByDateRange"}>Search</button>
                 </div>
             </div>
 

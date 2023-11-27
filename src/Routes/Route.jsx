@@ -2,7 +2,6 @@ import { createBrowserRouter } from "react-router-dom";
 import Root from "../Layouts/Root";
 import ErrorPage from "../Components/Root/ErrorPage/ErrorPage";
 import Home from "../Pages/Home/Home";
-import AboutUs from "../Components/Contact/Contact";
 import LogIn from "../Components/Authentication/Login";
 import SignUp from "../Components/Authentication/SignUp";
 import PrivateRoute from "./PrivateRoute";
@@ -18,6 +17,8 @@ import DeliveryList from "../Pages/Dashboard/Delivery Man/DeliveryList";
 import DeliveryManReviews from "../Pages/Dashboard/Delivery Man/DeliveryManReviews";
 import Contact from "../Components/Contact/Contact";
 import Settings from "../Pages/Dashboard/Common/Settings";
+import AdminRoute from "./AdminRoute";
+import DeliveryMenRoute from "./DeliveryMenRoute";
 
 
 const Route = createBrowserRouter([
@@ -52,19 +53,29 @@ const Route = createBrowserRouter([
             // Admin  routes
             {
                 path: 'allParcels',
-                element: <AllParcel></AllParcel>
+                element: <AdminRoute><AllParcel></AllParcel></AdminRoute>
             },
             {
                 path: 'allUsers',
-                element: <AllUser></AllUser>
+                element: <AdminRoute><AllUser></AllUser></AdminRoute>
             },
             {
                 path: 'allDeliveryMen',
-                element: <AllDeliveryMan></AllDeliveryMan>
+                element: <AdminRoute><AllDeliveryMan></AllDeliveryMan></AdminRoute>
             },
             {
                 path: 'statistics',
-                element: <Statistics></Statistics>
+                element: <AdminRoute><Statistics></Statistics></AdminRoute>
+            },
+
+            // Delivery Man routes
+            {
+                path: 'deliveryList',
+                element: <DeliveryMenRoute><DeliveryList></DeliveryList></DeliveryMenRoute>
+            },
+            {
+                path: 'myReviews',
+                element: <DeliveryMenRoute><DeliveryManReviews></DeliveryManReviews></DeliveryMenRoute>
             },
 
             // User routes
@@ -79,16 +90,6 @@ const Route = createBrowserRouter([
             {
                 path: 'bookAParcel',
                 element: <BookAParcel></BookAParcel>
-            },
-
-            // Delivery Man routes
-            {
-                path: 'deliveryList',
-                element: <DeliveryList></DeliveryList>
-            },
-            {
-                path: 'myReviews',
-                element: <DeliveryManReviews></DeliveryManReviews>
             },
 
             // Common routes

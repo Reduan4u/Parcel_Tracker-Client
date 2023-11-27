@@ -13,11 +13,9 @@ const UserParcels = () => {
         window.location.href = (`/parcel/${parcelId}`);
     };
 
-    const handleCancel = (parcelId) => {
-        // Implement cancellation logic here
-        // You may want to show a confirmation dialog before canceling
-        // Update the parcel status to 'cancelled' in the backend
-        // Reload the parcels data after cancellation
+    const handleCancel = async (parcelId) => {
+
+
     };
 
     const handleReview = (parcelId) => {
@@ -53,7 +51,7 @@ const UserParcels = () => {
                             <td className="border px-2 py-2">{parcel.deliveryDate
                             }</td>
                             <td className="border px-2 py-2">{parcel.approximateDeliveryDate}</td>
-                            <td className="border px-2 py-2">{parcel.bookingDate ? parcel.bookingDate : "Null"}</td>
+                            <td className="border px-2 py-2">{parcel.bookingDate}</td>
                             <td className="border px-2 py-2">{parcel.deliveryMenId}</td>
                             <td className="border px-2 py-2">{"Pending"}</td>
                             <td className="border px-2 py-2 space-y-2">
