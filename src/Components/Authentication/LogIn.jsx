@@ -7,6 +7,7 @@ import { AuthContext } from "../../Provider/AuthProvider";
 import Lottie from "lottie-react";
 import logIn from "../../assets/login.json";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import { Helmet } from "react-helmet-async";
 
 //import axios from "axios";
 
@@ -29,25 +30,16 @@ const LogIn = () => {
 
         signIn(email, password)
             .then(result => {
-                const loggedInUser = result.user;
-                console.log(loggedInUser);
-                Navigate(location?.state ? location.state : '/')
-                //const user = { email };
-                /* axios.post('https://taste-trial-paradise-server.vercel.app/jwt', user, { withCredentials: true })
-                    .then(res => {
-                        console.log(res.data);
-                        if (res.data.success) {
-                            Navigate(location?.state ? location.state : '/')
-                        }
-                    }) */
+                const user = result.user;
+                console.log(user);
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
-                    title: 'Login Successful',
+                    title: 'LogIn Successful',
                     showConfirmButton: false,
                     timer: 1000,
-
                 });
+                Navigate(location?.state ? location.state : '/')
             })
             .catch(error => {
                 console.error(error);
@@ -117,6 +109,9 @@ const LogIn = () => {
 
     return (
         <div >
+            <Helmet>
+                <title>Bistro Boss | Login</title>
+            </Helmet>
             <div className="hero min-h-screen w-10/12 m-auto">
                 <div className="hero-content flex-col lg:flex-row-reverse">
                     <div className="flex-1 text-center lg:text-left">

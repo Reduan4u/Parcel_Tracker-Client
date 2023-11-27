@@ -7,7 +7,7 @@ import useParcel from "../../../Hooks/useParcel";
 const Navbar = () => {
     const { user, logOut } = useAuth();
     const [parcel] = useParcel();
-    console.log(parcel);
+    // console.log(parcel);
 
     //Theme Setup
     const [theme, setTheme] = useState(localStorage.getItem("theme") ? localStorage.getItem("theme") : "light");
