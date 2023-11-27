@@ -1,26 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import Swal from 'sweetalert2';
-import useAxiosPublic from '../../../Hooks/useAxiosPublic';
+import useParcel from '../../../Hooks/useParcel';
 
 const UserParcels = () => {
-    const axiosInstance = useAxiosPublic();
-    const [parcels, setParcels] = useState([]);
+    const parcel = useParcel();
+    const userParcel = parcel[0];
 
-    useEffect(() => {
-        // Fetch parcels data for the logged-in user
-        axiosInstance.get('/parcel') // Update the endpoint based on your API
-            .then(response => {
-                setParcels(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching parcels:', error);
-            });
-    }, [axiosInstance]);
-    console.log(parcels);
+    console.log(userParcel);
+
     const handleUpdate = (parcelId) => {
+
         // Redirect user to the update booking page
         // Implement your navigation logic
-        // Example: history.push(`/update-booking/${parcelId}`);
+        window.location.href = (`/parcel/${parcelId}`);
     };
 
     const handleCancel = (parcelId) => {
@@ -43,7 +33,7 @@ const UserParcels = () => {
 
     return (
         <div className="container mx-auto mt-8">
-            <h1 className="text-4xl text-center font-bold mb-4">My Parcels</h1>
+            <h1 className="text-4xl text-center font-bold mb-4">My Parcels: <span className='text-red-400'>{userParcel.length}</span> </h1>
             <table className="min-w-full border border-gray-300">
                 <thead>
                     <tr>
@@ -57,7 +47,7 @@ const UserParcels = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {parcels.map(parcel => (
+                    {userParcel.map(parcel => (
                         <tr key={parcel._id}>
                             <td className="border px-2  py-2">{parcel.parcelType}</td>
                             <td className="border px-2 py-2">{parcel.deliveryDate
@@ -66,31 +56,25 @@ const UserParcels = () => {
                             <td className="border px-2 py-2">{parcel.bookingDate ? parcel.bookingDate : "Null"}</td>
                             <td className="border px-2 py-2">{parcel.deliveryMenId}</td>
                             <td className="border px-2 py-2">{"Pending"}</td>
-                            <td className="border px-2 py-2">
-                                {parcel.bookingStatus === 'pending' && (
-                                    <>
-                                        <button
-                                            onClick={() => handleUpdate(parcel._id)}
-                                            className="bg-blue-500 hover:bg-blue-700 text-white px-2 py-1 rounded mr-2"
-                                        >
-                                            Update
-                                        </button>
-                                        <button
-                                            onClick={() => handleCancel(parcel._id)}
-                                            className="bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded mr-2"
-                                        >
-                                            Cancel
-                                        </button>
-                                    </>
-                                )}
-                                {parcel.bookingStatus === 'delivered' && (
-                                    <button
-                                        onClick={() => handleReview(parcel._id)}
-                                        className="bg-green-500 hover:bg-green-700 text-white px-2 py-1 rounded mr-2"
-                                    >
-                                        Review
-                                    </button>
-                                )}
+                            <td className="border px-2 py-2 space-y-2">
+                                <button
+                                    onClick={() => handleUpdate(parcel._id)}
+                                    className="bg-blue-500 hover:bg-blue-700 text-white px-2 py-1 w-full rounded mr-2"
+                                >
+                                    Update
+                                </button>
+                                <button
+                                    onClick={() => handleCancel(parcel._id)}
+                                    className="bg-red-500 hover:bg-red-700 text-white px-2 py-1 w-full  rounded mr-2"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={() => handleReview(parcel._id)}
+                                    className="bg-green-500 hover:bg-green-700 text-white px-2 py-1 w-full  rounded mr-2"
+                                >
+                                    Review
+                                </button>
                             </td>
                         </tr>
                     ))}
@@ -99,7 +83,7 @@ const UserParcels = () => {
             <div className="mt-4">
                 <button
                     onClick={handlePay}
-                    className="w-full bg-red-500 hover:bg-red-700 text-white px-2 py-2 rounded"
+                    className="w-full bg-teal-500 hover:bg-teal-600 font-bold text-black text-xl px-2 py-2 rounded"
                 >
                     Pay for All
                 </button>

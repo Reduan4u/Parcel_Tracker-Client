@@ -32,7 +32,11 @@ const AuthProvider = ({ children }) => {
         return sendPasswordResetEmail(auth, email)
     }
 
-
+    const updateUserProfile = (name, photo) => {
+        return updateProfile(auth.currentUser, {
+            displayName: name, photoURL: photo
+        });
+    }
 
     useEffect(() => {
         const unSubscribe = onAuthStateChanged(auth, currentUser => {
@@ -53,6 +57,7 @@ const AuthProvider = ({ children }) => {
         googleSignIn,
         logOut,
         passwordReset,
+        updateUserProfile
     }
 
 

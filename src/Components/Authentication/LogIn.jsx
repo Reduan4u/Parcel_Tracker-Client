@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Lottie from "lottie-react";
 import logIn from "../../assets/login.json";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
 
 //import axios from "axios";
 
@@ -17,8 +18,9 @@ const LogIn = () => {
     const { signIn, passwordReset, googleSignIn } = useContext(AuthContext);
     const location = useLocation();
     const Navigate = useNavigate();
+    const axiosPublic = useAxiosPublic();
 
-    const handleLogIn = e => {
+    const handleLogIn = async (e) => {
         e.preventDefault();
         const form = new FormData(e.currentTarget);
         const email = form.get('email');
@@ -30,14 +32,14 @@ const LogIn = () => {
                 const loggedInUser = result.user;
                 console.log(loggedInUser);
                 Navigate(location?.state ? location.state : '/')
-                /* const user = { email };
-                 axios.post('https://taste-trial-paradise-server.vercel.app/jwt', user, { withCredentials: true })
-                 .then(res => {
-                     console.log(res.data);
-                     if (res.data.success) {
-                         Navigate(location?.state ? location.state : '/')
-                     }
-                 }) */
+                //const user = { email };
+                /* axios.post('https://taste-trial-paradise-server.vercel.app/jwt', user, { withCredentials: true })
+                    .then(res => {
+                        console.log(res.data);
+                        if (res.data.success) {
+                            Navigate(location?.state ? location.state : '/')
+                        }
+                    }) */
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
@@ -61,8 +63,17 @@ const LogIn = () => {
     const handleGoogle = () => {
         googleSignIn()
             .then((result) => {
-                Navigate(location?.state ? location.state : '/')
                 console.log(result.user);
+                const userInfo = {
+                    email: result.user?.email,
+                    name: result.user?.displayName,
+                    role: "User"
+                }
+                axiosPublic.post('/users', userInfo)
+                    .then(res => {
+                        Navigate(location?.state ? location.state : '/')
+                        console.log(res.data);
+                    })
             })
             .catch(error => {
                 console.log(error);

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import useAuth from "../../../Hooks/useAuth";
 import Swal from "sweetalert2";
-import useAxiosPublic from "../../../Hooks/useAxiosPublic";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
 const BookAParcel = () => {
     const { user } = useAuth();
-    const axiosInstance = useAxiosPublic();
+    const axiosInstance = useAxiosSecure();
     //console.log(user);
     const senderName = user.displayName;
     const senderEmail = user.email;

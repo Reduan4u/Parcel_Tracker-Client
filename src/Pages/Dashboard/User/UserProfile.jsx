@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const UserProfile = () => {
     const { user } = useAuth();
-    console.log(user);
+    //console.log(user);
     const [profilePicture, setProfilePicture] = useState(null);
     const [previewImage, setPreviewImage] = useState(null);
 

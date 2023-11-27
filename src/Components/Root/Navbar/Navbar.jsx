@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { MdNotificationAdd } from "react-icons/md";
 import useAuth from "../../../Hooks/useAuth";
+import useParcel from "../../../Hooks/useParcel";
 
 const Navbar = () => {
     const { user, logOut } = useAuth();
-    // console.log(user);
+    const [parcel] = useParcel();
+    console.log(parcel);
 
     //Theme Setup
     const [theme, setTheme] = useState(localStorage.getItem("theme") ? localStorage.getItem("theme") : "light");
@@ -59,7 +61,7 @@ const Navbar = () => {
                 <div className="navbar-end space-x-3">
                     <div>
                         <button className="">
-                            <div className="badge py-6 bg-transparent text-2xl rounded-full border-black"><MdNotificationAdd></MdNotificationAdd><span className="text-red-400 font-bold pb-2">**</span></div>
+                            <div className="badge py-6 bg-transparent text-2xl rounded-full border-black"><MdNotificationAdd></MdNotificationAdd><span className="text-red-400 font-bold pb-2">{parcel.length}</span></div>
                         </button>
                     </div>
                     {user?.email ? (
