@@ -22,11 +22,23 @@ const UserProfile = () => {
         }
     };
 
-    const handleProfileUpdate = () => {
-        // Handle profile update logic here
-        // You can send the updated information (including the new profile picture) to the server
-        // Remember to handle the file upload appropriately, maybe using FormData
-        // Example: const formData = new FormData(); formData.append('profilePicture', profilePicture);
+    const handleProfileUpdate = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('profilePicture', profilePicture);
+
+            // Send the updated information (including the new profile picture) to the server
+            await axios.put(`/users/updateProfile/${user._id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            // Optionally, you can refresh the user data or display a success message
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            // Handle error, e.g., display an error message
+        }
     };
 
     return (

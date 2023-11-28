@@ -1,5 +1,54 @@
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import CountUp from 'react-countup';
 
-const Statistics = () => {
+
+const State = () => {
+    const axiosSecure = useAxiosSecure();
+    const { data: users = [], refetch: refetchUsers } = useQuery({
+        queryKey: ['users'],
+        queryFn: async () => {
+            const res = await axiosSecure.get('/users');
+            return res.data;
+        },
+        select: (data) => {
+            console.log(data);
+            // Filter users with "user" role
+            return data;
+        },
+
+    });
+
+    const { data: parcels = [], refetch: refetchParcels } = useQuery({
+        queryKey: ['parcels'],
+        queryFn: async () => {
+            const res = await axiosSecure.get('/parcel');
+            return res.data;
+        },
+        select: (data) => {
+            console.log(data);
+            // Filter users with "user" role
+            return data;
+        },
+
+    });
+    const { data: deliveredParcels = [], refetch: refetchDeliveredParcels } = useQuery({
+        queryKey: ['deliveredParcels'],
+        queryFn: async () => {
+            const res = await axiosSecure.get('/parcel');
+            return res.data;
+        },
+        select: (data) => {
+            console.log(data);
+            // Filter users with "user" role
+            return data.filter(user => user.bookingStatus === 'delivered');
+        },
+
+    });
+    console.log(deliveredParcels);
+
+
+
     return (
         <div>
             <section className="p-6 w-11/12 max-w-7xl mx-auto my-10 bg-teal-500 rounded-lg ">
@@ -10,7 +59,7 @@ const Statistics = () => {
                             <img className="h-32 w-32" src="https://assets-global.website-files.com/6153505f6048ea69cba70145/62c2f80558834637cc5b2391_PO%20Extraction.png" alt="" />
                         </div>
                         <div className="flex flex-col justify-center align-middle ">
-                            <p className="text-3xl font-semibold leadi">200</p>
+                            <p className="text-4xl font-bold text-red-500 text-center  "><CountUp end={parcels.length} duration={3} /></p>
                             <p className="capitalize">Parcel Booked</p>
                         </div>
                     </div>
@@ -20,7 +69,7 @@ const Statistics = () => {
                             <img className="h-32 w-32" src="https://assets-global.website-files.com/6153505f6048ea69cba70145/62cc74662afd139d085d0b72_Off%20Page%20muilti%20hop-p-500.png" alt="" />
                         </div>
                         <div className="flex flex-col justify-center align-middle ">
-                            <p className="text-3xl font-semibold leadi">200</p>
+                            <p className="text-4xl font-bold text-red-500 text-center  "><CountUp end={deliveredParcels.length} duration={3} /></p>
                             <p className="capitalize">Parcel Delivered</p>
                         </div>
                     </div>
@@ -30,7 +79,7 @@ const Statistics = () => {
                             <img className="h-32 w-32" src="https://assets-global.website-files.com/6153505f6048ea69cba70145/618864afa8f201cb7e8c89eb_Digital%20Log%20-%20Searchable%20Log.png" alt="" />
                         </div>
                         <div className="flex flex-col justify-center align-middle ">
-                            <p className="text-3xl font-semibold leadi">200</p>
+                            <p className="text-4xl font-bold text-red-500 text-center  "><CountUp end={users.length} duration={3} /></p>
                             <p className="capitalize">Active User</p>
                         </div>
                     </div>
@@ -42,4 +91,4 @@ const Statistics = () => {
     );
 };
 
-export default Statistics;
+export default State;

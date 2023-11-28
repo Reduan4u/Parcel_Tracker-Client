@@ -19,6 +19,7 @@ import Contact from "../Components/Contact/Contact";
 import Settings from "../Pages/Dashboard/Common/Settings";
 import AdminRoute from "./AdminRoute";
 import DeliveryMenRoute from "./DeliveryMenRoute";
+import UpdateParcel from "../Pages/Dashboard/User/UpdateParcel";
 
 
 const Route = createBrowserRouter([
@@ -90,6 +91,10 @@ const Route = createBrowserRouter([
             {
                 path: 'bookAParcel',
                 element: <BookAParcel></BookAParcel>
+            },
+            {
+                path: 'parcelUpdate/:id',
+                element: <UpdateParcel></UpdateParcel>
             },
 
             // Common routes

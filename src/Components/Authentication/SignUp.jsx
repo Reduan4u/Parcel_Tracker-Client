@@ -110,7 +110,8 @@ const SignUp = () => {
                         const userInfo = {
                             name: data.name,
                             email: data.email,
-                            role: data.role
+                            role: data.role,
+                            image: data.photoURL
                         }
                         axiosPublic.post('/users', userInfo)
                             .then(res => {
@@ -162,7 +163,7 @@ const SignUp = () => {
                                     <label className="label">
                                         <span className="label-text">Photo URL</span>
                                     </label>
-                                    <input type="text"  {...register("photoURL", { required: true })} placeholder="Photo URL" className="input input-bordered" />
+                                    <input type="text"  {...register("photoURL", { required: true })} name="photoURL" placeholder="Photo URL" className="input input-bordered" />
                                     {errors.photoURL && <span className="text-red-600">Photo URL is required</span>}
                                 </div>
                                 <div className="form-control">

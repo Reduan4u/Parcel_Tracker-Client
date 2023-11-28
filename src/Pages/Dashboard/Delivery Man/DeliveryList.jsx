@@ -1,16 +1,16 @@
-import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import useAuth from '../../../Hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
+import useAxiosPublic from '../../../Hooks/useAxiosPublic';
 
 const DeliveryList = () => {
     const { user } = useAuth();
     const userEmail = user.email;
-    const axiosSecure = useAxiosSecure();
+    const axiosPublic = useAxiosPublic();
     const { data: deliveryParcels = [], refetch } = useQuery({
         queryKey: ['deliveryParcels'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/parcel');
+            const res = await axiosPublic.get('/parcel');
             return res.data;
         },
         select: (data) => {
@@ -22,7 +22,8 @@ const DeliveryList = () => {
 
 
     const handleCancel = (parcel) => {
-        axiosSecure.patch(`/parcel/cancel/${parcel}`)
+        console.log(parcel);
+        axiosPublic.patch(`/parcel/cancel/${parcel}`)
             .then(res => {
                 console.log(res.data)
                 if (res.data.modifiedCount > 0) {
@@ -39,10 +40,25 @@ const DeliveryList = () => {
     };
 
 
-    const handleDeliver = (parcelId) => {
-        // Logic to handle delivering a parcel
-        // Make a backend request to update the parcel status to 'Delivered'
-        // Show an alert before sending the request
+    const handleDeliver = (parcelId, dmId) => {
+        axiosPublic.patch(`/parcel/deliver/${parcelId}`)
+            .then(res => {
+                console.log(res.data)
+                if (res.data.modifiedCount > 0) {
+                    axiosPublic.patch(`/deliverCount/${dmId}`)
+                        .then(res => {
+                            console.log(res.data);
+                        })
+                    refetch();
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "The Booking is Delivered",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            })
     };
 
     return (
@@ -61,6 +77,7 @@ const DeliveryList = () => {
                             <th className='text-center' >Receivers <br />Address</th>
                             <th className='text-center' >Requested <br />Delivery <br />Date</th>
                             <th className='text-center' >Approximate <br />Delivery <br />Date</th>
+                            <th className='text-center' >Status</th>
                             <th className='text-center' >Action</th>
 
                         </tr>
@@ -76,21 +93,36 @@ const DeliveryList = () => {
                                 <td className="border">{parcel.receiverAddress}</td>
                                 <td className="border">{parcel.deliveryDate}</td>
                                 <td className="border">{parcel.approximateDeliveryDate}</td>
+                                <td className="border">{parcel.bookingStatus}</td>
                                 <td className="border py-2 flex flex-col space-y-1">
                                     {/* Add view location button logic here */}
-                                    <button className="bg-blue-500 hover:bg-blue-700 text-white px-2 py-1 rounded"
+
+                                    <button className="bg-blue-500 hover:bg-blue-700  text-white px-2 py-1 rounded"
                                     >Location</button>
-                                    <button className="bg-red-500 hover:bg-red-700 text-white px-2 py-1 rounded"
-                                        onClick={() => handleCancel(parcel._id)}>Cancel</button>
-                                    <button className="bg-green-500 hover:bg-green-700 text-white px-2 py-1 rounded"
-                                        onClick={() => handleDeliver(parcel._id)}>Deliver</button>
+
+
+                                    {
+                                        parcel.bookingStatus === "On The Way" ? <button
+                                            className="bg-red-500 hover:bg-red-700 text-white  px-2 py-1 rounded"
+                                            onClick={() => handleCancel(parcel._id)}
+                                        >
+                                            Cancel
+                                        </button> : ""
+                                    }
+
+
+                                    {
+                                        parcel.bookingStatus === "On The Way" ? <button className="bg-green-500 hover:bg-green-700 text-white px-2 py-1 rounded"
+                                            onClick={() => handleDeliver(parcel._id, parcel.deliveryMenId)}>Deliver</button> : ""
+                                    }
+
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
-        </div>
+        </div >
     );
 };
 

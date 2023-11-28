@@ -192,12 +192,19 @@ const AllParcel = () => {
                             <td className="border px-2 py-2">{parcel.bookingStatus}</td>
                             <td className="border px-2 py-2">
                                 {/* Add manage button logic here */}
-                                <button
-                                    onClick={() => handleManage(parcel._id)}
-                                    className="bg-blue-500 hover:bg-blue-700 text-white px-2 py-1 rounded mr-2"
-                                >
-                                    Manage
-                                </button>
+                                {
+                                    parcel.bookingStatus === "pending" ? <button
+                                        onClick={() => handleManage(parcel._id)}
+                                        className="bg-blue-500 hover:bg-blue-700 text-white px-2 py-1 rounded mr-2"
+                                    >
+                                        Manage
+                                    </button> : <button disabled
+                                        onClick={() => handleManage(parcel._id)}
+                                        className={`bg-blue-500 hover:bg-blue-700 text-white px-2 py-1 rounded mr-2 ${parcel.bookingStatus !== "pending" ? "opacity-50 cursor-not-allowed" : ""}`}
+                                    >
+                                        Manage
+                                    </button>
+                                }
                             </td>
                         </tr>
                     ))}
