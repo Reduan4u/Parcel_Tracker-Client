@@ -35,7 +35,7 @@ const AllDeliveryMan = () => {
                             <td className="border px-2 py-2">{index + 1}</td>
                             <td className="border px-2 py-2">{deliveryMan.name}</td>
                             <td className="border px-2 py-2">{deliveryMan.email}</td>
-                            <td className="border px-2 py-2">{deliveryMan.parcelDelivered?.length}</td>
+                            <td className="border px-2 py-2 text-center">{deliveryMan.count ? deliveryMan.count : ""}</td>
                             {/* Logic to calculate average review */}
                             <td className="border px-2 py-2">{/* Display average review */}</td>
                         </tr>

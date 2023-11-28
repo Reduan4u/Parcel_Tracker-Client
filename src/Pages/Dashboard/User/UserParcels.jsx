@@ -47,7 +47,7 @@ const UserParcels = () => {
                             refetch();
                             Swal.fire({
                                 title: "Cancelled!",
-                                text: "Your parcel has been cancelled.",
+                                text: "Your parcel has been deleted.",
                                 icon: "success"
                             });
                         }

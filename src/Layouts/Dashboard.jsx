@@ -39,7 +39,7 @@ const Dashboard = () => {
     }
     return (
         <div>
-            <div className="flex w-10/12 m-auto max-w-6xl overflow-x-auto">
+            <div className="flex m-auto max-w-7xl overflow-x-auto">
                 {/* dashboard side bar */}
                 <div className="w-72 min-h-screen bg-teal-400">
                     <ul className="menu">

@@ -62,7 +62,6 @@ const AllUser = () => {
                         <th className="border px-2 py-2">User Name</th>
                         <th className="border px-2 py-2">Phone Number</th>
                         <th className="border px-2 py-2">Number of Parcels Booked</th>
-                        <th className="border px-2 py-2">Total Spent Amount</th>
                         <th className="border px-2 py-2">Make Delivery Man</th>
                         <th className="border px-2 py-2">Make Admin</th>
                     </tr>
@@ -75,7 +74,6 @@ const AllUser = () => {
                             <td className="border px-2 py-2 text-center">{user.phoneNumber ? user.phoneNumber : <><p className='text-red-300'>No Booking Yet</p></>}</td>
                             <td className="border px-2 py-2 text-center">{user.parcelsBooked ? user.parcelsBooked : <><p className='text-red-300 '>00</p></>}</td>
                             {/* Logic to calculate total spent amount */}
-                            <td className="border px-2 py-2">{/* Display total spent amount */}</td>
                             <td className="border px-2 py-2">
                                 <button
                                     onClick={() => makeDeliveryMan(user)}

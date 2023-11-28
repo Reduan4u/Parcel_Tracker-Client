@@ -2,6 +2,11 @@ import useAuth from '../../../Hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 import useAxiosPublic from '../../../Hooks/useAxiosPublic';
+import ReactMapGL, { Marker } from 'react-map-gl';
+import { useState } from 'react';
+import Modal from 'react-modal';
+
+
 
 const DeliveryList = () => {
     const { user } = useAuth();
@@ -20,25 +25,45 @@ const DeliveryList = () => {
     //console.log(deliveryParcels);
 
 
+    // State to manage map modal visibility
+    const [showMapModal, setShowMapModal] = useState(false);
+    const [selectedParcelLocation, setSelectedParcelLocation] = useState(null);
 
-    const handleCancel = (parcel) => {
-        console.log(parcel);
-        axiosPublic.patch(`/parcel/cancel/${parcel}`)
-            .then(res => {
-                console.log(res.data)
-                if (res.data.modifiedCount > 0) {
-                    refetch();
-                    Swal.fire({
-                        position: "top-end",
-                        icon: "success",
-                        title: "This Booking is Cancelled",
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                }
-            })
+    // Function to open the map modal
+    const handleOpenMapModal = (latitude, longitude) => {
+        setSelectedParcelLocation({ latitude, longitude });
+        setShowMapModal(true);
     };
 
+
+    const handleCancel = (parcelId) => {
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Cancel it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axiosPublic.patch(`/parcel/cancel/${parcelId}`)
+                    .then(res => {
+                        console.log(res.data)
+                        if (res.data.modifiedCount > 0) {
+                            refetch();
+                            Swal.fire({
+                                title: "Cancelled!",
+                                text: "The Parcel has been cancelled.",
+                                icon: "success"
+                            });
+                        }
+                    });
+            }
+        });
+    };
+    //console.log(deliveryParcels);
 
     const handleDeliver = (parcelId, dmId) => {
         axiosPublic.patch(`/parcel/deliver/${parcelId}`)
@@ -65,7 +90,7 @@ const DeliveryList = () => {
         <div className="container mx-auto mt-8">
             <h2 className="text-4xl font-bold mb-4">My Delivery List</h2>
 
-            <div className='overflow-x-auto'>
+            {deliveryParcels.length > 0 ? <div className='overflow-x-auto'>
                 <table className="table table-xs table-pin-rows table-pin-cols">
                     <thead>
                         <tr>
@@ -97,8 +122,13 @@ const DeliveryList = () => {
                                 <td className="border py-2 flex flex-col space-y-1">
                                     {/* Add view location button logic here */}
 
-                                    <button className="bg-blue-500 hover:bg-blue-700  text-white px-2 py-1 rounded"
-                                    >Location</button>
+                                    {/* Add view location button logic here */}
+                                    <button
+                                        className="bg-blue-500 hover:bg-blue-700 text-white px-2 py-1 rounded"
+                                        onClick={() => handleOpenMapModal(parcel.latitude, parcel.longitude)}
+                                    >
+                                        Location
+                                    </button>
 
 
                                     {
@@ -121,7 +151,39 @@ const DeliveryList = () => {
                         ))}
                     </tbody>
                 </table>
-            </div>
+            </div> :
+                <div>
+                    <h1 className='text-5xl text-center font-bold mt-20 text-red-500'>No Parcel to Deliver!</h1>
+                </div>}
+
+            {/* Map Modal */}
+            {showMapModal && (
+                <Modal>
+                    <div className="map-modal">
+                        <ReactMapGL
+                            width="100%"
+                            height="100%"
+                            latitude={selectedParcelLocation.latitude}
+                            longitude={selectedParcelLocation.longitude}
+                            zoom={12}
+                        // mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
+                        // onViewportChange={(viewport) => { /* handle viewport changes if needed */ }}
+                        >
+                            {/* Marker for the selected location */}
+                            <Marker
+                                latitude={selectedParcelLocation.latitude}
+                                longitude={selectedParcelLocation.longitude}
+                                offsetLeft={-20}
+                                offsetTop={-20}
+                            >
+                                <div>📍</div>
+                            </Marker>
+                        </ReactMapGL>
+                    </div>
+                    <button onClick={() => setShowMapModal(false)}>Close Map</button>
+                </Modal>
+            )}
+
         </div >
     );
 };

@@ -15,6 +15,7 @@ const AllParcel = () => {
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
 
+
     const { user } = useAuth();
 
     const { data: deliveryMan = [], refetch } = useQuery({
@@ -50,58 +51,34 @@ const AllParcel = () => {
         return formattedDate;
     };
 
+    const handleSearchByDateRange = async () => {
+        try {
+            // Make an API call to fetch parcels based on date range
+            const response = await axiosSecure.get(`/parcel?fromDate=${fromDate}&toDate=${toDate}`);
+            setParcels(response.data);
+            console.log(response.data);
+        } catch (error) {
+            console.error('Error searching by date range:', error);
+            // Handle error
+        }
+    };
 
 
     const handleManage = async (parcelId) => {
         const selected = parcels.find(parcel => parcel._id === parcelId);
         setSelectedParcel(selected);
-
-        // Fetch the list of delivery men
         const deliveryMenResponse = await axiosSecure.get('/deliveryMan');
         setDeliveryMen(deliveryMenResponse.data);
-
-        // Reset the selected delivery man and approximate delivery date
         setSelectedDeliveryMan('');
         setApproximateDeliveryDate('');
-
         setIsModalOpen(true);
     };
-
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setSelectedDeliveryMan('');
         setApproximateDeliveryDate('');
     };
-
-    /* const handleAssignDeliveryMan = async () => {
-        try {
-            // Make API call to assign delivery man
-            const response = await axiosSecure.put(`/manageParcel/${selectedParcel._id}`, {
-                deliveryManId: selectedDeliveryMan,
-                approximateDeliveryDate,
-            });
-
-            // Handle success, close the modal, and update the parcels
-            console.log(response.data);
-            setIsModalOpen(false);
-
-            // Fetch updated parcels and set them in the state
-            const updatedParcelsResponse = await axiosSecure.get('/parcel');
-            setParcels(updatedParcelsResponse.data);
-
-            // Fetch the updated list of delivery men (including email)
-            const updatedDeliveryMenResponse = await axiosSecure.get('/users');
-            setDeliveryMen(
-                updatedDeliveryMenResponse.data
-                    .filter(user => user.role === 'DeliveryMen')
-                    .map(deliveryMan => ({ ...deliveryMan, email: req.user.email }))
-            );
-        } catch (error) {
-            console.error('Error managing parcel:', error);
-            // Handle error
-        }
-    }; */
 
     const handleAssignDeliveryMan = async () => {
         try {
@@ -134,7 +111,6 @@ const AllParcel = () => {
     };
 
 
-
     return (
         <div className="container mx-auto mt-8">
             <h1 className="text-4xl text-center font-bold mb-4">All Parcels: <span className='text-red-400'>{parcels.length}</span> </h1>
@@ -163,7 +139,7 @@ const AllParcel = () => {
                     />
                 </div>
                 <div>
-                    <button className='btn btn-info' onClick={"handleSearchByDateRange"}>Search</button>
+                    <button className='btn btn-info' onClick={handleSearchByDateRange}>Search</button>
                 </div>
             </div>
 
@@ -211,9 +187,7 @@ const AllParcel = () => {
                 </tbody>
             </table>
 
-
             {/* Modal for managing parcel */}
-            {/* Manage Modal */}
             <Modal
                 isOpen={isModalOpen}
                 onRequestClose={handleCloseModal}

@@ -12,7 +12,7 @@ const State = () => {
             return res.data;
         },
         select: (data) => {
-            console.log(data);
+            //console.log(data);
             // Filter users with "user" role
             return data;
         },
@@ -26,7 +26,7 @@ const State = () => {
             return res.data;
         },
         select: (data) => {
-            console.log(data);
+            // console.log(data);
             // Filter users with "user" role
             return data;
         },
@@ -39,13 +39,13 @@ const State = () => {
             return res.data;
         },
         select: (data) => {
-            console.log(data);
+            // console.log(data);
             // Filter users with "user" role
             return data.filter(user => user.bookingStatus === 'delivered');
         },
 
     });
-    console.log(deliveredParcels);
+    //console.log(deliveredParcels);
 
 
 
