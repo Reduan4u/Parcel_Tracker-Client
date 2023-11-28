@@ -1,10 +1,23 @@
-import useParcel from '../../../Hooks/useParcel';
+import { useQuery } from '@tanstack/react-query';
+import useAxiosPublic from '../../../Hooks/useAxiosPublic';
+import useAuth from '../../../Hooks/useAuth';
+import Swal from 'sweetalert2';
 
 const UserParcels = () => {
-    const parcel = useParcel();
-    const userParcel = parcel[0];
-
-    console.log(userParcel);
+    const { user } = useAuth();
+    const userEmail = user.email;
+    const axiosPublic = useAxiosPublic();
+    const { data: userParcels = [], refetch } = useQuery({
+        queryKey: ['userParcels'],
+        queryFn: async () => {
+            const res = await axiosPublic.get('/parcel');
+            return res.data;
+        },
+        select: (data) => {
+            return data.filter(userParcel => userParcel.senderEmail === userEmail);
+        },
+    });
+    //console.log(userParcels);
 
     const handleUpdate = (parcelId) => {
 
@@ -14,7 +27,21 @@ const UserParcels = () => {
     };
 
     const handleCancel = async (parcelId) => {
-
+        console.log(parcelId);
+        axiosPublic.patch(`/parcel/${parcelId._id}`)
+            .then(res => {
+                console.log(res.data)
+                if (res.data.modifiedCount > 0) {
+                    refetch();
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "The Booking is Canceled",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            })
 
     };
 
@@ -31,7 +58,7 @@ const UserParcels = () => {
 
     return (
         <div className="container mx-auto mt-8">
-            <h1 className="text-4xl text-center font-bold mb-4">My Parcels: <span className='text-red-400'>{userParcel.length}</span> </h1>
+            <h1 className="text-4xl text-center font-bold mb-4">My Parcels: <span className='text-red-400'>{userParcels.length}</span> </h1>
             <table className="min-w-full border border-gray-300">
                 <thead>
                     <tr>
@@ -45,7 +72,7 @@ const UserParcels = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {userParcel.map(parcel => (
+                    {userParcels.map(parcel => (
                         <tr key={parcel._id}>
                             <td className="border px-2  py-2">{parcel.parcelType}</td>
                             <td className="border px-2 py-2">{parcel.deliveryDate
@@ -53,7 +80,7 @@ const UserParcels = () => {
                             <td className="border px-2 py-2">{parcel.approximateDeliveryDate}</td>
                             <td className="border px-2 py-2">{parcel.bookingDate}</td>
                             <td className="border px-2 py-2">{parcel.deliveryMenId}</td>
-                            <td className="border px-2 py-2">{"Pending"}</td>
+                            <td className="border px-2 py-2">{parcel.bookingStatus}</td>
                             <td className="border px-2 py-2 space-y-2">
                                 <button
                                     onClick={() => handleUpdate(parcel._id)}

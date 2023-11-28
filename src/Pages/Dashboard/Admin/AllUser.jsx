@@ -11,41 +11,12 @@ const AllUser = () => {
             return res.data;
         },
         select: (data) => {
+            //console.log(data);
             // Filter users with "user" role
             return data.filter(user => user.role === 'User');
         },
 
     });
-
-
-
-    /*  const [users, setUsers] = useState([]);
-     console.log(users);
-     const [currentPage, setCurrentPage] = useState(1);
-     const usersPerPage = 5;
- 
-     useEffect(() => {
-         // Fetch all users from the server
-         axiosSecure.get('/users')
-             .then(response => {
-                 console.log(response.data);
-                 // Filter users with "User" role
-                 const filteredUsers = response.data.filter(user => user.role === 'User');
-                 console.log(filteredUsers);
- 
- 
-                 setUsers(response.data);
-             })
-             .catch(error => {
-                 console.error('Error fetching users:', error);
-             });
-     }, [axiosSecure]); */
-
-    // Logic for pagination
-    /* const indexOfLastUser = currentPage * usersPerPage;
-    const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
-   const paginate = pageNumber => setCurrentPage(pageNumber); */
 
     const makeDeliveryMan = (user) => {
         axiosSecure.patch(`/users/deliveryMen/${user._id}`)

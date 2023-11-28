@@ -8,16 +8,28 @@ import { MdBorderColor } from "react-icons/md";
 import { IoMdSettings } from "react-icons/io";
 import { RiLogoutBoxFill } from "react-icons/ri";
 
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import useAdmin from "../Hooks/useAdmin";
 import useDeliveryMen from "../Hooks/useDeliveryMen";
+import { useEffect } from "react";
 
 const Dashboard = () => {
     const { user, logOut } = useAuth();
-    // console.log(user);
     const [isDeliveryMen] = useDeliveryMen();
     const [isAdmin] = useAdmin();
+    const navigate = useNavigate();
+
+    // Navigate to the appropriate page based on the user's role
+    useEffect(() => {
+        if (isAdmin) {
+            navigate('/dashboard/statistics');
+        } else if (isDeliveryMen) {
+            navigate('/dashboard/deliveryList');
+        } else {
+            navigate('/dashboard/userParcels');
+        }
+    }, [isAdmin, isDeliveryMen, navigate]);
 
 
     const handleSignOut = () => {
@@ -27,7 +39,7 @@ const Dashboard = () => {
     }
     return (
         <div>
-            <div className="flex w-10/12 m-auto max-w-6xl">
+            <div className="flex w-10/12 m-auto max-w-6xl overflow-x-auto">
                 {/* dashboard side bar */}
                 <div className="w-72 min-h-screen bg-teal-400">
                     <ul className="menu">

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import Modal from 'react-modal';
+import useAxiosSecure from '../../../Hooks/useAxiosSecure';
+import { useQuery } from '@tanstack/react-query';
+import useAuth from '../../../Hooks/useAuth';
 
 const AllParcel = () => {
     const axiosSecure = useAxiosSecure();
@@ -13,6 +15,21 @@ const AllParcel = () => {
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
 
+    const { user } = useAuth();
+
+    const { data: deliveryMan = [], refetch } = useQuery({
+        queryKey: ['deliveryMan'],
+        queryFn: async () => {
+            const res = await axiosSecure.get('/users');
+            return res.data;
+        },
+        select: (data) => {
+            // console.log(data);
+            // Filter users with "user" role
+            return data.filter(user => user.role === 'DeliveryMen');
+        },
+
+    });
 
     useEffect(() => {
         // Fetch all parcels data
@@ -24,14 +41,7 @@ const AllParcel = () => {
                 console.error('Error fetching all parcels:', error);
             });
 
-        // Fetch delivery men
-        axiosSecure.get('/deliveryMan')
-            .then(response => {
-                setDeliveryMen(response.data);
-            })
-            .catch(error => {
-                console.error('Error fetching delivery men:', error);
-            });
+
     }, [axiosSecure]);
 
     const formatDate = (dateString) => {
@@ -40,30 +50,89 @@ const AllParcel = () => {
         return formattedDate;
     };
 
-    const handleManage = (parcelId) => {
+
+
+    const handleManage = async (parcelId) => {
         const selected = parcels.find(parcel => parcel._id === parcelId);
         setSelectedParcel(selected);
+
+        // Fetch the list of delivery men
+        const deliveryMenResponse = await axiosSecure.get('/deliveryMan');
+        setDeliveryMen(deliveryMenResponse.data);
+
+        // Reset the selected delivery man and approximate delivery date
+        setSelectedDeliveryMan('');
+        setApproximateDeliveryDate('');
+
         setIsModalOpen(true);
     };
+
+
     const handleCloseModal = () => {
         setIsModalOpen(false);
+        setSelectedDeliveryMan('');
+        setApproximateDeliveryDate('');
     };
 
-    const handleAssignDeliveryMan = () => {
-        // Make API call to assign delivery man
-        axiosSecure.put(`/manageParcel/${selectedParcel}`, {
-            deliveryManId: selectedDeliveryMan,
-            approximateDeliveryDate: approximateDeliveryDate,
-        }).then(response => {
+    /* const handleAssignDeliveryMan = async () => {
+        try {
+            // Make API call to assign delivery man
+            const response = await axiosSecure.put(`/manageParcel/${selectedParcel._id}`, {
+                deliveryManId: selectedDeliveryMan,
+                approximateDeliveryDate,
+            });
+
             // Handle success, close the modal, and update the parcels
             console.log(response.data);
             setIsModalOpen(false);
-            setParcels(updatedParcels); // Update with the new parcels
-        }).catch(error => {
+
+            // Fetch updated parcels and set them in the state
+            const updatedParcelsResponse = await axiosSecure.get('/parcel');
+            setParcels(updatedParcelsResponse.data);
+
+            // Fetch the updated list of delivery men (including email)
+            const updatedDeliveryMenResponse = await axiosSecure.get('/users');
+            setDeliveryMen(
+                updatedDeliveryMenResponse.data
+                    .filter(user => user.role === 'DeliveryMen')
+                    .map(deliveryMan => ({ ...deliveryMan, email: req.user.email }))
+            );
+        } catch (error) {
             console.error('Error managing parcel:', error);
             // Handle error
-        });
+        }
+    }; */
+
+    const handleAssignDeliveryMan = async () => {
+        try {
+            // Make API call to assign delivery man
+            const response = await axiosSecure.put(`/manageParcel/${selectedParcel._id}`, {
+                deliveryManId: selectedDeliveryMan,
+                approximateDeliveryDate,
+                deliveryMenEmail: user.email, // Replace with the correct way to get the delivery man's email
+            });
+
+            // Handle success, close the modal, and update the parcels
+            console.log(response.data);
+            setIsModalOpen(false);
+
+            // Fetch updated parcels and set them in the state
+            const updatedParcelsResponse = await axiosSecure.get('/parcel');
+            setParcels(updatedParcelsResponse.data);
+            console.log(deliveryMan);
+            // Fetch the updated list of delivery men (including email)
+            const updatedDeliveryMenResponse = await axiosSecure.get('/users');
+            setDeliveryMen(
+                updatedDeliveryMenResponse.data
+                    .filter(user => user.role === 'DeliveryMen')
+                    .map(deliveryMan => ({ ...deliveryMan, email: user.email }))
+            );
+        } catch (error) {
+            console.error('Error managing parcel:', error);
+            // Handle error
+        }
     };
+
 
 
     return (
@@ -154,10 +223,14 @@ const AllParcel = () => {
                             onChange={(e) => setSelectedDeliveryMan(e.target.value)}
                         >
                             <option value="" >Select Delivery Man</option>
-                            {deliveryMen.map(deliveryMan => (
-                                <option key={deliveryMan._id} value={deliveryMan._id}>{deliveryMan.name}</option>
+                            {deliveryMan.map(user => (
+                                // Check if the user is a delivery man (role === 'DeliveryMen')
+                                user.role === 'DeliveryMen' && (
+                                    <option key={user._id} value={user._id}>{user.name}</option>
+                                )
                             ))}
                         </select>
+
                     </div>
                     <div>
                         <label className='font-bold text-2xl text-center pr-4' htmlFor="approximateDeliveryDate">Approximate Delivery Date:</label>

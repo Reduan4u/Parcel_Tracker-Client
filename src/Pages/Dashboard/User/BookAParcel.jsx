@@ -50,13 +50,14 @@ const BookAParcel = () => {
         const deliveryDate = form.elements.deliveryDate.value;
         const parcelCost = form.elements.parcelCost.value;
         const bookingStatus = "pending";
-        const approximateDeliveryDate = form.elements.deliveryDate.value;
-        const deliveryMenId = "";
+        const approximateDeliveryDate = "processing";
+        const deliveryMenId = "processing";
+        const deliveryMenEmail = "processing";
 
 
 
 
-        const newParcel = { senderName, senderEmail, senderNumber, parcelWeight, parcelType, receiverName, receiverNumber, receiverAddress, addressLatitude, addressLongitude, deliveryDate, parcelCost, bookingDate, bookingStatus, approximateDeliveryDate, deliveryMenId };
+        const newParcel = { senderName, senderEmail, senderNumber, parcelWeight, parcelType, receiverName, receiverNumber, receiverAddress, addressLatitude, addressLongitude, deliveryDate, parcelCost, bookingDate, bookingStatus, approximateDeliveryDate, deliveryMenId, deliveryMenEmail };
         console.log(newParcel);
 
         axiosInstance.post('/parcel', newParcel)
