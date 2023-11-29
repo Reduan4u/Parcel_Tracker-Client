@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import CountUp from 'react-countup';
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 
 
 const State = () => {
-    const axiosSecure = useAxiosSecure();
+    const axiosPublic = useAxiosPublic();
     const { data: users = [], refetch: refetchUsers } = useQuery({
         queryKey: ['users'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/users');
+            const res = await axiosPublic.get('/users');
             return res.data;
         },
         select: (data) => {
@@ -22,7 +22,7 @@ const State = () => {
     const { data: parcels = [], refetch: refetchParcels } = useQuery({
         queryKey: ['parcels'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/parcel');
+            const res = await axiosPublic.get('/parcel');
             return res.data;
         },
         select: (data) => {
@@ -35,7 +35,7 @@ const State = () => {
     const { data: deliveredParcels = [], refetch: refetchDeliveredParcels } = useQuery({
         queryKey: ['deliveredParcels'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/parcel');
+            const res = await axiosPublic.get('/parcel');
             return res.data;
         },
         select: (data) => {

@@ -3,10 +3,26 @@ import { NavLink } from "react-router-dom";
 import { MdNotificationAdd } from "react-icons/md";
 import useAuth from "../../../Hooks/useAuth";
 import useParcel from "../../../Hooks/useParcel";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
 
 const Navbar = () => {
     const { user, logOut } = useAuth();
     const [parcel] = useParcel();
+    const axiosPublic = useAxiosPublic();
+
+    const { data: usersData = [], refetch } = useQuery({
+        queryKey: ['usersData'],
+        queryFn: async () => {
+            const res = await axiosPublic.get('/users');
+            return res.data;
+        },
+        select: (data) => {
+            return data.filter(userData => userData.email === user.email)
+        },
+    });
+    const userInfo = usersData[0];
+
     // console.log(parcel);
 
     //Theme Setup
@@ -64,12 +80,12 @@ const Navbar = () => {
                             <div className="badge py-6 bg-transparent text-2xl rounded-full border-black"><MdNotificationAdd></MdNotificationAdd><span className="text-red-400 font-bold pb-2">{parcel.length}</span></div>
                         </button>
                     </div>
-                    {user?.email ? (
+                    {userInfo?.email ? (
                         <div className="dropdown dropdown-end ">
                             <label tabIndex={0} className="cursor-pointer">
                                 <div className="avatar">
                                     <div className="w-6 sm:w-8 md:w-10 lg:w-10 h-6 sm:h-8 md:h-10 lg:h-10 rounded-full">
-                                        <img src={user.photoURL} />
+                                        <img src={userInfo?.image} />
                                     </div>
                                 </div>
                             </label>
@@ -77,7 +93,7 @@ const Navbar = () => {
                                 tabIndex={0}
                                 className="dropdown-content z-[11] menu p-2 shadow bg-base-100 rounded-box w-48"
                             >
-                                <h1 className="px-4 py-2 font-bold text-right">{user.displayName}</h1>
+                                <h1 className="px-4 py-2 font-bold text-right">{userInfo?.name}</h1>
                                 <NavLink
                                     to="/dashboard"
                                     className="px-4 py-2 hover:bg-base-300 rounded-lg text-right"

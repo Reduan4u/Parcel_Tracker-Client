@@ -1,44 +1,81 @@
 import { useState } from "react";
 import useAuth from "../../../Hooks/useAuth";
-import axios from 'axios';
+import { useQuery } from "@tanstack/react-query";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
+import Swal from "sweetalert2";
+import axios from "axios";
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const UserProfile = () => {
     const { user } = useAuth();
-    //console.log(user);
-    const [profilePicture, setProfilePicture] = useState(null);
-    const [previewImage, setPreviewImage] = useState(null);
+    const userEmail = user.email;
+    const axiosPublic = useAxiosPublic();
 
-    const handleImageChange = (e) => {
+    const { data: usersData = [], refetch } = useQuery({
+        queryKey: ['usersData'],
+        queryFn: async () => {
+            const res = await axiosPublic.get('/users');
+            return res.data;
+        },
+        select: (data) => {
+            return data.filter(userData => userData.email === userEmail)
+        },
+    });
+    const userInfo = usersData[0];
+    //console.log(userInfo);
+    //console.log(user);
+
+    const [previewImage, setPreviewImage] = useState(null);
+    console.log(previewImage);
+
+    const handleImageChange = async (e) => {
         // Handle image upload logic here
         const file = e.target.files[0];
         // You can use FileReader to display a preview if needed
         if (file) {
-            setProfilePicture(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPreviewImage(reader.result);
-            };
-            reader.readAsDataURL(file);
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await axios.post(image_hosting_api, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+
+                setPreviewImage(response.data.data.url);
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                // Handle error, show error message, etc.
+            }
         }
     };
 
-    const handleProfileUpdate = async () => {
-        try {
-            const formData = new FormData();
-            formData.append('profilePicture', profilePicture);
-
-            // Send the updated information (including the new profile picture) to the server
-            await axios.put(`/users/updateProfile/${user._id}`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+    const handleProfileUpdate = async (userId) => {
+        const updatedUserData = {
+            name: userInfo.name,
+            email: userInfo.email,
+            image: previewImage || userInfo.image,
+        };
+        axiosPublic.patch(`/users/profileUpdate/${userId}`, updatedUserData)
+            .then(res => {
+                console.log(res.data)
+                if (res.data.modifiedCount > 0) {
+                    refetch();
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Profile Updated Successfully",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error updating profile:', error);
+                // Handle error, show error message, etc.
             });
-
-            // Optionally, you can refresh the user data or display a success message
-        } catch (error) {
-            console.error('Error updating profile:', error);
-            // Handle error, e.g., display an error message
-        }
     };
 
     return (
@@ -47,13 +84,13 @@ const UserProfile = () => {
 
             <div className="flex flex-col items-center">
                 <img
-                    src={previewImage || user.photoURL} // Use the actual property from your user object
+                    src={previewImage || userInfo?.image}
                     alt="Profile"
                     className="w-32 h-32 rounded-full object-cover mb-4"
                 />
                 <div>
-                    <h2 className="text-xl font-semibold">{user.displayName}</h2>
-                    <p className="text-gray-600">{user.email}</p>
+                    <h2 className="text-xl font-semibold">{userInfo?.name}</h2>
+                    <p className="text-gray-600">{userInfo?.email}</p>
                 </div>
             </div>
             <div className="my-6">
@@ -69,7 +106,7 @@ const UserProfile = () => {
                 />
             </div>
             <button
-                onClick={handleProfileUpdate}
+                onClick={() => handleProfileUpdate(userInfo._id)}
                 className="w-full mt-4 bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 focus:outline-none focus:ring focus:border-indigo-300"
             >
                 Update Profile
