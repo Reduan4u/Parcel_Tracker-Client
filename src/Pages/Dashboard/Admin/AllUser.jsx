@@ -72,7 +72,7 @@ const AllUser = () => {
                             <td className="border px-2 py-2">{index + 1}</td>
                             <td className="border px-2 py-2">{user.name}</td>
                             <td className="border px-2 py-2 text-center">{user.phoneNumber ? user.phoneNumber : <><p className='text-red-300'>No Booking Yet</p></>}</td>
-                            <td className="border px-2 py-2 text-center">{user.parcelsBooked ? user.parcelsBooked : <><p className='text-red-300 '>00</p></>}</td>
+                            <td className="border px-2 py-2 text-center">{user.bookingCount ? user.bookingCount : <><p className='text-red-300 '>00</p></>}</td>
                             {/* Logic to calculate total spent amount */}
                             <td className="border px-2 py-2">
                                 <button

@@ -4,6 +4,7 @@ import useAuth from '../../../Hooks/useAuth';
 import Swal from 'sweetalert2';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import ReviewModal from './ReviewModal';
 
 const UserParcels = () => {
     const { user } = useAuth();
@@ -21,11 +22,55 @@ const UserParcels = () => {
     });
     //console.log(userParcels);
 
-    const handleUpdate = (parcelId) => {
 
-        // Redirect user to the update booking page
-        // Implement your navigation logic
-        window.location.href = (`/parcel/${parcelId}`);
+
+    const { data: usersData = [] } = useQuery({
+        queryKey: ['usersData'],
+        queryFn: async () => {
+            const res = await axiosPublic.get('/users');
+            return res.data;
+        },
+        select: (data) => {
+            return data.find(userData => userData.email === userEmail)
+        },
+    });
+    //console.log(usersData);
+
+    const [reviewModalOpen, setReviewModalOpen] = useState(false);
+    const [deliveryManId, setDeliveryManId] = useState(null);
+    const [parcelsId, setParcelsId] = useState(null);
+    //console.log(parcelsId);
+    const handleReview = (deliveryManId, parcelId) => {
+        setDeliveryManId(deliveryManId);
+        setParcelsId(parcelId)
+        setReviewModalOpen(true);
+    };
+
+    const handleCloseReviewModal = () => {
+        setReviewModalOpen(false);
+    };
+
+    const handleSubmitReview = (reviewData) => {
+        axiosPublic.patch(`/user/review/${reviewData.dmId}`, reviewData)
+            .then(res => {
+                console.log(res.data);
+                if (res.data.modifiedCount > 0) {
+                    console.log(parcelsId);
+                    axiosPublic.patch(`/user/reviewed/${parcelsId}`)
+                        .then(res => {
+                            console.log(res.data);
+                        })
+                    refetch();
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "success",
+                        title: "Review Submitted Successfully",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            })
+        console.log('Review submitted:', reviewData);
     };
 
     const handleCancel = (parcelId) => {
@@ -56,11 +101,7 @@ const UserParcels = () => {
         });
     };
 
-    const handleReview = (parcelId) => {
-        // Implement review logic here
-        // Check if the parcel status is 'delivered' before showing the review button
-        // Show a review modal or navigate to a review page
-    };
+
 
     const handlePay = (parcelId) => {
         // Implement payment logic here
@@ -139,7 +180,7 @@ const UserParcels = () => {
                                     parcel.bookingStatus === "delivered" ?
                                         <>
                                             <button
-                                                onClick={() => handleReview(parcel._id)}
+                                                onClick={() => handleReview(parcel.deliveryMenId, parcel._id)}
                                                 className="bg-green-500 hover:bg-green-700 text-white px-2 py-1 w-full  rounded mr-2"
                                             >
                                                 Review
@@ -147,9 +188,8 @@ const UserParcels = () => {
                                         </>
                                         :
                                         <>
-                                            <Link to={`/parcelUpdate/${parcel._id}`}>
+                                            <Link to={`/dashboard/parcelUpdate/${parcel._id}`}>
                                                 <button
-
                                                     className={`bg-blue-500 hover:bg-blue-700 text-white px-2 py-1 w-full rounded mr-2 ${parcel.bookingStatus !== "pending" ? "opacity-50 cursor-not-allowed" : ""}`}
                                                     disabled={parcel.bookingStatus !== "pending"}
                                                 >
@@ -179,6 +219,16 @@ const UserParcels = () => {
                     Pay for All
                 </button>
             </div>
+            {/* Review Modal */}
+            <ReviewModal
+                isOpen={reviewModalOpen}
+                onClose={handleCloseReviewModal}
+                onSubmit={handleSubmitReview}
+                dmId={deliveryManId}
+                name={usersData.name}
+                image={usersData.image}
+            />
+
         </div >
     );
 };

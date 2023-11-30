@@ -19,15 +19,14 @@ const UserProfile = () => {
             return res.data;
         },
         select: (data) => {
-            return data.filter(userData => userData.email === userEmail)
+            return data.find(userData => userData.email === userEmail)
         },
     });
-    const userInfo = usersData[0];
     //console.log(userInfo);
     //console.log(user);
 
     const [previewImage, setPreviewImage] = useState(null);
-    console.log(previewImage);
+    //console.log(previewImage);
 
     const handleImageChange = async (e) => {
         // Handle image upload logic here
@@ -54,9 +53,9 @@ const UserProfile = () => {
 
     const handleProfileUpdate = async (userId) => {
         const updatedUserData = {
-            name: userInfo.name,
-            email: userInfo.email,
-            image: previewImage || userInfo.image,
+            name: usersData.name,
+            email: usersData.email,
+            image: previewImage || usersData.image,
         };
         axiosPublic.patch(`/users/profileUpdate/${userId}`, updatedUserData)
             .then(res => {
@@ -84,13 +83,13 @@ const UserProfile = () => {
 
             <div className="flex flex-col items-center">
                 <img
-                    src={previewImage || userInfo?.image}
+                    src={previewImage || usersData?.image}
                     alt="Profile"
                     className="w-32 h-32 rounded-full object-cover mb-4"
                 />
                 <div>
-                    <h2 className="text-xl font-semibold">{userInfo?.name}</h2>
-                    <p className="text-gray-600">{userInfo?.email}</p>
+                    <h2 className="text-xl font-semibold">{usersData?.name}</h2>
+                    <p className="text-gray-600">{usersData?.email}</p>
                 </div>
             </div>
             <div className="my-6">
@@ -106,7 +105,7 @@ const UserProfile = () => {
                 />
             </div>
             <button
-                onClick={() => handleProfileUpdate(userInfo._id)}
+                onClick={() => handleProfileUpdate(usersData._id)}
                 className="w-full mt-4 bg-teal-500 text-white py-2 px-4 rounded-md hover:bg-teal-600 focus:outline-none focus:ring focus:border-indigo-300"
             >
                 Update Profile

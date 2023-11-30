@@ -2,10 +2,9 @@ import useAuth from '../../../Hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 import useAxiosPublic from '../../../Hooks/useAxiosPublic';
-import ReactMapGL, { Marker } from 'react-map-gl';
-import { useState } from 'react';
-import Modal from 'react-modal';
-
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+const position = [51., -0.9]
 
 
 const DeliveryList = () => {
@@ -24,20 +23,7 @@ const DeliveryList = () => {
     });
     //console.log(deliveryParcels);
 
-
-    // State to manage map modal visibility
-    const [showMapModal, setShowMapModal] = useState(false);
-    const [selectedParcelLocation, setSelectedParcelLocation] = useState(null);
-
-    // Function to open the map modal
-    const handleOpenMapModal = (latitude, longitude) => {
-        setSelectedParcelLocation({ latitude, longitude });
-        setShowMapModal(true);
-    };
-
-
     const handleCancel = (parcelId) => {
-
         Swal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -125,7 +111,7 @@ const DeliveryList = () => {
                                     {/* Add view location button logic here */}
                                     <button
                                         className="bg-blue-500 hover:bg-blue-700 text-white px-2 py-1 rounded"
-                                        onClick={() => handleOpenMapModal(parcel.latitude, parcel.longitude)}
+                                        onClick={() => document.getElementById('my_modal_4').showModal()}
                                     >
                                         Location
                                     </button>
@@ -157,32 +143,34 @@ const DeliveryList = () => {
                 </div>}
 
             {/* Map Modal */}
-            {showMapModal && (
-                <Modal>
-                    <div className="map-modal">
-                        <ReactMapGL
-                            width="100%"
-                            height="100%"
-                            latitude={selectedParcelLocation.latitude}
-                            longitude={selectedParcelLocation.longitude}
-                            zoom={12}
-                        // mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
-                        // onViewportChange={(viewport) => { /* handle viewport changes if needed */ }}
-                        >
-                            {/* Marker for the selected location */}
-                            <Marker
-                                latitude={selectedParcelLocation.latitude}
-                                longitude={selectedParcelLocation.longitude}
-                                offsetLeft={-20}
-                                offsetTop={-20}
-                            >
-                                <div>📍</div>
-                            </Marker>
-                        </ReactMapGL>
+
+            {/* You can open the modal using document.getElementById('ID').showModal() method */}
+            <dialog id="my_modal_4" className="modal">
+                <div className="modal-box w-11/12 max-w-5xl">
+
+                    <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+                        <TileLayer
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                        <Marker position={position}>
+                            <Popup>
+                                A pretty CSS3 popup. <br /> Easily customizable.
+                            </Popup>
+                        </Marker>
+                    </MapContainer>
+
+                    <div className="modal-action flex justify-center">
+                        <form method="dialog ">
+                            {/* if there is a button, it will close the modal */}
+                            <button className="btn">Close</button>
+                        </form>
                     </div>
-                    <button onClick={() => setShowMapModal(false)}>Close Map</button>
-                </Modal>
-            )}
+                </div>
+            </dialog>
+
+
+
 
         </div >
     );

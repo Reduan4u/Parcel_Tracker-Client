@@ -3,7 +3,23 @@ import '@smastrom/react-rating/style.css'
 
 
 const DeliveryManCard = ({ deliveryMan }) => {
-    const { dmName, dmImage, parcelsDelivered, averageRating } = deliveryMan;
+    const { name, image, deliveryCount, reviews } = (deliveryMan);
+    console.log(reviews);
+    const allReviews = reviews;
+
+    const calculateAverageRating = (allReviews) => {
+        if (allReviews.length === 0) {
+            return 0; // Return 0 if there are no reviews to avoid division by zero
+        }
+
+        const sumOfRatings = allReviews.reduce((sum, review) => sum + review.rating, 0);
+        const averageRating = sumOfRatings / allReviews.length;
+
+        return averageRating;
+    };
+
+    const averageRating = calculateAverageRating(allReviews);
+    console.log('Average Rating:', averageRating);
 
     return (
 
@@ -11,15 +27,15 @@ const DeliveryManCard = ({ deliveryMan }) => {
             <section className=" bg-teal-500 rounded-lg">
                 <div className="container flex flex-col items-center justify-center p-4 mx-auto sm:p-10">
                     <div className="flex flex-col justify-center w-full px-4 mx-2 my-12 rounded-md  bg-base-100 text-start ">
-                        <img alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full" src={dmImage} />
+                        <img alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full" src={image} />
                         <div className="flex-1 my-4 ">
-                            <p className="text-xl font-semibold leadi flex justify-between">Name: <span className="font-bold text-red-400">{dmName}</span></p>
+                            <p className="text-xl font-semibold leadi flex justify-between">Name: <span className="font-bold text-red-400">{name}</span></p>
                             <div className="text-xl font-semibold flex justify-between"> Rating:<Rating
                                 style={{ maxWidth: 100 }}
-                                value={averageRating}
+                                value={4.7}
                                 readOnly
                             /></div>
-                            <div className="text-xl font-semibold flex justify-between"><span>Parcel Delivered:</span> <span className="font-bold text-red-400 ">{parcelsDelivered} </span>
+                            <div className="text-xl font-semibold flex justify-between"><span>Parcel Delivered:</span> <span className="font-bold text-red-400 ">{deliveryCount} </span>
                             </div>
 
 

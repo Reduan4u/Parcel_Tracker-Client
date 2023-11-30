@@ -1,5 +1,85 @@
+import useAuth from "../../../Hooks/useAuth";
+import { useLoaderData } from "react-router-dom";
+import { useState } from "react";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const UpdateParcel = () => {
+    const parcel = useLoaderData();
+    const { user } = useAuth();
+    const axiosInstance = useAxiosSecure();
+    const senderName = user.displayName;
+    const senderEmail = user.email;
+    //console.log(parcel);
+
+    //Update
+
+    const [parcelWeight, setParcelWeight] = useState('');
+    const handleParcelWeightChange = (event) => {
+        const weight = parseFloat(event.target.value) || '';
+        setParcelWeight(weight);
+    };
+    const calculateCost = () => {
+        const weight = parseFloat(parcelWeight);
+        if (!isNaN(weight)) {
+            if (weight === 1) {
+                return 50;
+            } else if (weight === 2) {
+                return 100;
+            } else if (weight > 2) {
+                return 150;
+            }
+        }
+        return 0;
+    }
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(today.getDate()).padStart(2, '0');
+    const bookingDate = `${year}-${month}-${day}`;
+    //console.log(bookingDate);
+
+    const handleUpdate = event => {
+        event.preventDefault();
+        const form = event.target;
+        const senderNumber = form.elements.senderNumber.value;
+        const parcelWeight = form.elements.parcelWeight.value;
+        const parcelType = form.elements.parcelType.value;
+        const receiverName = form.elements.receiverName.value;
+        const receiverNumber = form.elements.receiverNumber.value;
+        const receiverAddress = form.elements.receiverAddress.value;
+        const addressLatitude = form.elements.addressLatitude.value;
+        const addressLongitude = form.elements.addressLongitude.value;
+        const deliveryDate = form.elements.deliveryDate.value;
+        const parcelCost = form.elements.parcelCost.value;
+        const bookingStatus = "pending";
+        const approximateDeliveryDate = "processing";
+        const deliveryMenId = "processing";
+        const deliveryMenEmail = "processing";
+
+        const newParcel = { senderName, senderEmail, senderNumber, parcelWeight, parcelType, receiverName, receiverNumber, receiverAddress, addressLatitude, addressLongitude, deliveryDate, parcelCost, bookingDate, bookingStatus, approximateDeliveryDate, deliveryMenId, deliveryMenEmail };
+        //console.log(newParcel);
+
+        axiosInstance.patch(`/parcel/update/${parcel._id}`, newParcel)
+            .then(res => {
+                const data = res.data;
+                console.log(data);
+                if (data.modifiedCount > 0) {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Parcel Updated Successfully',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    form.reset();
+                }
+            })
+            .catch(error => {
+                console.error('Error Updating parcel:', error);
+            });
+
+    }
     return (
         <div>
             <div className="flex py-4 rounded-lg bg-gray-100">
@@ -16,7 +96,7 @@ const UpdateParcel = () => {
                                     </g>
                                 </g>
                             </svg>
-                            <span className="pl-2 mx-1">Book A Parcel</span>
+                            <span className="pl-2 mx-1">Update A Parcel</span>
                         </button>
                     </div>
 
@@ -33,29 +113,29 @@ const UpdateParcel = () => {
                                 <h1 className="inline text-2xl font-semibold leading-none">Sender</h1>
                             </div>
                         </div>
-                        <form onSubmit={handleBook}>
+                        <form onSubmit={handleUpdate}>
                             <div className="px-5 pb-5 space-y-2">
                                 <div>
                                     <label className=" font-bold pl-1">Name:</label>
-                                    <input defaultValue={user.displayName} readOnly className=" text-gray-700 font-medium w-full px-4 py-2.5  text-base   transition duration-500 ease-in-out transform.elements border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" />
+                                    <input defaultValue={parcel?.senderName} readOnly className=" text-gray-700 font-medium w-full px-4 py-2.5  text-base   transition duration-500 ease-in-out transform.elements border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" />
                                 </div>
                                 <div>
                                     <label className=" font-bold pl-1">Email:</label>
-                                    <input defaultValue={user.email} readOnly className=" text-gray-700 font-medium w-full px-4 py-2.5  text-base   transition duration-500 ease-in-out transform.elements border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" />
+                                    <input defaultValue={parcel?.senderEmail} readOnly className=" text-gray-700 font-medium w-full px-4 py-2.5  text-base   transition duration-500 ease-in-out transform.elements border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" />
                                 </div>
                                 <div>
                                     <label className=" font-bold pl-1">Phone:</label>
-                                    <input required
+                                    <input
                                         name="senderNumber"
-                                        placeholder="Phone Number" type="number" className=" text-black font-medium w-full px-4 py-2.5  text-base   transition duration-500 ease-in-out transform.elements border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" />
+                                        placeholder={parcel.senderNumber} type="number" className=" text-black font-medium w-full px-4 py-2.5  text-base   transition duration-500 ease-in-out transform.elements border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" />
                                 </div>
 
                                 <div className="flex">
                                     <div className="w-2/5 pr-2">
                                         <label className=" font-bold pl-1">Weight:</label>
-                                        <input required
+                                        <input
                                             name="parcelWeight"
-                                            placeholder="Parcel Weight (kg)"
+                                            placeholder={parcel.parcelWeight}
                                             value={parcelWeight}
                                             onChange={handleParcelWeightChange}
                                             type="number"
@@ -63,9 +143,9 @@ const UpdateParcel = () => {
                                     </div>
                                     <div className="flex-grow" >
                                         <label className=" font-bold pl-1">Type:</label>
-                                        <input required
+                                        <input
                                             name="parcelType"
-                                            placeholder="Parcel Type"
+                                            placeholder={parcel.parcelType}
                                             type="text"
                                             className=" text-black font-medium w-full px-4 py-2.5  text-base   transition duration-500 ease-in-out transform.elements border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" />
                                     </div>
@@ -87,25 +167,25 @@ const UpdateParcel = () => {
                                     <div className="px-5 pb-5 space-y-2">
                                         <div>
                                             <label className=" font-bold pl-1">Name:</label>
-                                            <input required
+                                            <input
                                                 name="receiverName"
-                                                placeholder="Receiver’s Name"
+                                                placeholder={parcel.receiverName}
                                                 type="text"
                                                 className=" text-black font-medium w-full px-4 py-2.5  text-base   transition duration-500 ease-in-out transform.elements border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" />
                                         </div>
                                         <div>
                                             <label className=" font-bold pl-1">Phone:</label>
-                                            <input required
+                                            <input
                                                 name="receiverNumber"
-                                                placeholder="Phone Number"
+                                                placeholder={parcel.receiverNumber}
                                                 type="number"
                                                 className=" text-black font-medium w-full px-4 py-2.5  text-base   transition duration-500 ease-in-out transform.elements border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" />
                                         </div>
                                         <div>
                                             <label className=" font-bold pl-1">Address:</label>
-                                            <input required
+                                            <input
                                                 name="receiverAddress"
-                                                placeholder="Delivery Address"
+                                                placeholder={parcel.receiverAddress}
                                                 type="text"
                                                 className=" text-black font-medium w-full px-4 py-2.5  text-base   transition duration-500 ease-in-out transform.elements border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" />
                                         </div>
@@ -114,17 +194,17 @@ const UpdateParcel = () => {
                                             <div className="">
                                                 <label className=" font-bold pl-1">Address Latitude:</label>
 
-                                                <input required
+                                                <input
                                                     name="addressLatitude"
-                                                    placeholder="i.e 21.121365496"
+                                                    placeholder={parcel.addressLatitude}
                                                     type="number"
                                                     className=" text-black font-medium w-full px-4 py-2.5  text-base   transition duration-500 ease-in-out transform.elements border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" />
                                             </div>
                                             <div className="">
                                                 <label className=" font-bold pl-1">Address Longitude:</label>
-                                                <input required
+                                                <input
                                                     name="addressLongitude"
-                                                    placeholder="i.e 21.121365496"
+                                                    placeholder={parcel.addressLongitude}
                                                     type="number"
                                                     className=" text-black font-medium w-full px-4 py-2.5  text-base   transition duration-500 ease-in-out transform.elements border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" />
                                             </div>
@@ -132,16 +212,16 @@ const UpdateParcel = () => {
                                         <div className="flex justify-center items-center space-x-2">
                                             <div className="w-1/2">
                                                 <label className=" font-bold pl-1">Requested Delivery:</label>
-                                                <input required
+                                                <input
                                                     name="deliveryDate"
-                                                    placeholder="i.e 21.121365496"
                                                     type="date"
                                                     className=" text-black font-medium w-full px-4 py-2.5  text-base   transition duration-500 ease-in-out transform.elements border-transparent rounded-lg bg-gray-200  focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-800 focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ring-gray-400" />
                                             </div>
                                             <div className="w-1/2">
                                                 <label className=" font-bold pl-1">Cost:</label>
-                                                <input required
+                                                <input
                                                     name="parcelCost"
+                                                    placeholder={parcel.parcelCost}
                                                     value={calculateCost()}
                                                     readOnly
                                                     type="number"
@@ -154,7 +234,7 @@ const UpdateParcel = () => {
 
                             <div className="flex justify-center py-3">
                                 <button type="submit" className="flex items-center px-5 py-2.5 font-medium tracking-wide text-white capitalize   bg-black rounded-md hover:bg-gray-800  focus:outline-none focus:bg-gray-900  transition duration-300 transform.elements active:scale-95 ease-in-out">
-                                    <span className="pl-2 mx-1">BOOK PARCEL</span>
+                                    <span className="pl-2 mx-1">UPDATE PARCEL</span>
                                 </button>
                             </div>
                         </form>

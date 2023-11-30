@@ -82,7 +82,7 @@ const Route = createBrowserRouter([
             // User routes
             {
                 path: 'userProfile',
-                element: <UserProfile></UserProfile>
+                element: <PrivateRoute><UserProfile></UserProfile></PrivateRoute>
             },
             {
                 path: 'userParcels',
@@ -94,7 +94,9 @@ const Route = createBrowserRouter([
             },
             {
                 path: 'parcelUpdate/:id',
-                element: <UpdateParcel></UpdateParcel>
+                element: <UpdateParcel></UpdateParcel>,
+                loader: ({ params }) => fetch(`https://parcel-tracker-server-reduanul-haques-projects.vercel.app/parcel/${params.id}`)
+
             },
 
             // Common routes

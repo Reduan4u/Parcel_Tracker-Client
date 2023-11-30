@@ -15,7 +15,7 @@ const AllDeliveryMan = () => {
         },
 
     });
-
+    // console.log(deliveryMen);
     return (
         <div className="container mx-auto mt-8">
             <h1 className="text-4xl text-center font-bold mb-4">All Delivery Men: <span className='text-red-400'>{deliveryMen.length}</span></h1>
@@ -35,7 +35,7 @@ const AllDeliveryMan = () => {
                             <td className="border px-2 py-2">{index + 1}</td>
                             <td className="border px-2 py-2">{deliveryMan.name}</td>
                             <td className="border px-2 py-2">{deliveryMan.email}</td>
-                            <td className="border px-2 py-2 text-center">{deliveryMan.count ? deliveryMan.count : ""}</td>
+                            <td className="border px-2 py-2 text-center">{deliveryMan.deliveryCount ? deliveryMan.deliveryCount : "00"}</td>
                             {/* Logic to calculate average review */}
                             <td className="border px-2 py-2">{/* Display average review */}</td>
                         </tr>

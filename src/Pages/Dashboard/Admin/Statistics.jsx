@@ -1,10 +1,10 @@
 
 import { useEffect, useState } from 'react';
 import ApexChart from 'react-apexcharts';
-import useAxiosSecure from '../../../Hooks/useAxiosSecure';
+import useAxiosPublic from '../../../Hooks/useAxiosPublic';
 
 const Statistics = () => {
-    const axiosSecure = useAxiosSecure();
+    const axiosSecure = useAxiosPublic();
     const [chartData, setChartData] = useState({
         options: {
             chart: {
@@ -21,7 +21,9 @@ const Statistics = () => {
             },
         ],
     });
-    useEffect(() => {
+
+
+    /* useEffect(() => {
         // Fetch data for the bar chart
         axiosSecure.get('/bookingsByDate')
             .then(response => {
@@ -54,7 +56,7 @@ const Statistics = () => {
             .catch(error => {
                 console.error('Error fetching bookings by date:', error);
             });
-    }, [axiosSecure]);
+    }, [axiosSecure]); */
 
     return (
         <div className=''>

@@ -80,7 +80,7 @@ const Navbar = () => {
                             <div className="badge py-6 bg-transparent text-2xl rounded-full border-black"><MdNotificationAdd></MdNotificationAdd><span className="text-red-400 font-bold pb-2">{parcel.length}</span></div>
                         </button>
                     </div>
-                    {userInfo?.email ? (
+                    {user?.email ? (
                         <div className="dropdown dropdown-end ">
                             <label tabIndex={0} className="cursor-pointer">
                                 <div className="avatar">

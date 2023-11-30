@@ -16,87 +16,6 @@ const SignUp = () => {
     const { createUser, updateUserProfile } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    /* const handleSignUp = e => {
-        e.preventDefault();
-        const name = e.target.name.value;
-        const email = e.target.email.value;
-        const photoURL = e.target.photoURL.value;
-        const password = e.target.password.value;
-        const accepted = e.target.terms.checked;
-        setSignUpError('');
-
-        // Password validation rules
-        const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])(?=.*[a-zA-Z]).{8,}$/;
-        if (!passwordRegex.test(password)) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Weak Password',
-                footer: 'Password should be at least 8 characters long and contain at least one lowercase, uppercase letter, digit, and special character (!@#$%^&*()_+).'
-            })
-            setSignUpError(
-                'Password should be at least 8 characters long and contain at least one lowercase, uppercase letter, digit, and special character (!@#$%^&*()_+).'
-            );
-            return;
-        }
-        else if (!accepted) {
-            setSignUpError("Please, Accept or Terms & Conditions");
-            Swal.fire(
-                'Error?',
-                'Please, Accept or Terms & Conditions',
-                'question'
-            );
-            return;
-        }
-
-        createUser(email, password)
-            .then((result) => {
-                const newUser = result.user;
-                // Navigate('/')
-
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Successfully Signed Up',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                // Fetch user information after successful signUp
-                axiosInstance.post('/user', { email, name });
-
-
-                //update profile
-                updateProfile(result.user, {
-                    displayName: name,
-                    photoURL: photoURL,
-                })
-                    .then(() => {
-                        console.log('profile updated')
-                        console.log(newUser);
-
-                        // location.reload();
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Something went wrong!!!',
-                            footer: 'Please try again'
-                        })
-                    })
-            })
-            .catch(error => {
-                console.log(error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Something went wrong!!!',
-                    footer: 'Please try again'
-                })
-            })
-    } */
-
     const onSubmit = data => {
 
         createUser(data.email, data.password)
@@ -111,7 +30,11 @@ const SignUp = () => {
                             name: data.name,
                             email: data.email,
                             role: data.role,
-                            image: data.photoURL
+                            image: data.photoURL,
+                            phoneNumber: data.contactNumber,
+                            bookingCount: 0,
+                            deliveryCount: 0,
+                            reviews: []
                         }
                         axiosPublic.post('/users', userInfo)
                             .then(res => {
@@ -164,6 +87,13 @@ const SignUp = () => {
                                         <span className="label-text">Photo URL</span>
                                     </label>
                                     <input type="text"  {...register("photoURL", { required: true })} name="photoURL" placeholder="Photo URL" className="input input-bordered" />
+                                    {errors.photoURL && <span className="text-red-600">Photo URL is required</span>}
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Phone Number</span>
+                                    </label>
+                                    <input type="number"  {...register("contactNumber", { required: true })} name="contactNumber" placeholder="Phone Number" className="input input-bordered" />
                                     {errors.photoURL && <span className="text-red-600">Photo URL is required</span>}
                                 </div>
                                 <div className="form-control">

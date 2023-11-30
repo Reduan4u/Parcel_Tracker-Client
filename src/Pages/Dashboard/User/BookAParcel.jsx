@@ -1,14 +1,30 @@
 import { useState } from "react";
 import useAuth from "../../../Hooks/useAuth";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
 const BookAParcel = () => {
     const { user } = useAuth();
+    const axiosPublic = useAxiosPublic();
     const axiosInstance = useAxiosSecure();
     //console.log(user);
     const senderName = user.displayName;
     const senderEmail = user.email;
+
+    const { data: usersData = [], refetch } = useQuery({
+        queryKey: ['usersData'],
+        queryFn: async () => {
+            const res = await axiosPublic.get('/users');
+            return res.data;
+        },
+        select: (data) => {
+            return data.filter(userData => userData.email === senderEmail)
+        },
+    });
+    const userInfo = usersData[0];
+    //console.log(userInfo._id);
 
     const [parcelWeight, setParcelWeight] = useState('');
     const handleParcelWeightChange = (event) => {
@@ -54,17 +70,19 @@ const BookAParcel = () => {
         const deliveryMenId = "processing";
         const deliveryMenEmail = "processing";
 
-
-
-
         const newParcel = { senderName, senderEmail, senderNumber, parcelWeight, parcelType, receiverName, receiverNumber, receiverAddress, addressLatitude, addressLongitude, deliveryDate, parcelCost, bookingDate, bookingStatus, approximateDeliveryDate, deliveryMenId, deliveryMenEmail };
         console.log(newParcel);
 
         axiosInstance.post('/parcel', newParcel)
             .then(res => {
                 const data = res.data;
-                console.log(data);
+                // console.log(data);
                 if (data.insertedId) {
+                    axiosInstance.patch(`/user/bookingCount/${userInfo._id}`, newParcel)
+                        .then(res => {
+                            console.log(res.data);
+                        })
+                    refetch();
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
