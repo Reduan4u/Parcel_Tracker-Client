@@ -77,7 +77,7 @@ const Navbar = () => {
                 <div className="navbar-end space-x-3">
                     <div>
                         <button className="">
-                            <div className="badge py-6 bg-transparent text-2xl rounded-full border-black"><MdNotificationAdd></MdNotificationAdd><span className="text-red-400 font-bold pb-2">{parcel.length}</span></div>
+                            <div className="badge py-2 sm:py-3 md:py-4 lg:py-6 bg-transparent text-sm sm:text-base md:text-lg lg:xl rounded-full border-black"><MdNotificationAdd></MdNotificationAdd><span className="text-red-400 font-bold pb-2">{parcel.length}</span></div>
                         </button>
                     </div>
                     {user?.email ? (

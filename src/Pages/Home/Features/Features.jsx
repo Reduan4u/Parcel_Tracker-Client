@@ -1,26 +1,27 @@
 import SectionTitle from "../../../Components/SectionTitle/SectionTitle";
 
 const Features = () => {
+
     return (
         <div className="w-11/12 max-w-6xl mx-auto my-10">
-            <div>
+            <div className="">
 
                 <SectionTitle subHeading={"Every feature you need to manage incoming and outgoing parcels."} heading1={"Parcel Tracker"}
                     heading2={"Feature services"}>  </SectionTitle>
 
-                <div>
+                <div className="" data-aos="fade-down">
                     <img src="https://assets-global.website-files.com/6153505f6048ea0c20a70140/61773499dc718e23fbecdb54_Features.png" alt="" />
                 </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 " data-aos="fade-up">
 
                 {/* 1st card */}
-                <div className="card bg-base-100 shadow-xl">
+                <div className="card bg-base-100 shadow-xl" >
                     <figure className="px-10 pt-10">
                         <img src="https://assets-global.website-files.com/6153505f6048ea69cba70145/6188643391f90c14996b90b7_Outbound%20-%20Proof%20of%20dispatch-p-500.png" alt="Shoes" className="rounded-xl" />
                     </figure>
-                    <div className="card-body text-start mt-14">
+                    <div className="card-body text-start mt-8">
                         <h2 className="card-title">Super Fast Delivery</h2>
                         <p>First-mile pickup, last-mile delivery services for individuals</p>
                     </div>

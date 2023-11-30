@@ -4,7 +4,7 @@ import '@smastrom/react-rating/style.css'
 
 const DeliveryManCard = ({ deliveryMan }) => {
     const { name, image, deliveryCount, reviews } = (deliveryMan);
-    console.log(reviews);
+    //console.log(reviews);
     const allReviews = reviews;
 
     const calculateAverageRating = (allReviews) => {
@@ -19,7 +19,7 @@ const DeliveryManCard = ({ deliveryMan }) => {
     };
 
     const averageRating = calculateAverageRating(allReviews);
-    console.log('Average Rating:', averageRating);
+    //console.log('Average Rating:', averageRating);
 
     return (
 

@@ -56,7 +56,7 @@ const UserParcels = () => {
                 console.log(res.data);
                 if (res.data.modifiedCount > 0) {
                     console.log(parcelsId);
-                    axiosPublic.patch(`/user/reviewed/${parcelsId}`)
+                    axiosPublic.patch(`/parcel/reviewed/${parcelsId}`)
                         .then(res => {
                             console.log(res.data);
                         })

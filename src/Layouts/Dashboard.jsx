@@ -7,18 +7,19 @@ import { FaBoxesPacking } from "react-icons/fa6";
 import { MdBorderColor } from "react-icons/md";
 import { IoMdSettings } from "react-icons/io";
 import { RiLogoutBoxFill } from "react-icons/ri";
-
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import useAdmin from "../Hooks/useAdmin";
 import useDeliveryMen from "../Hooks/useDeliveryMen";
 import { useEffect } from "react";
+import Loader from "../Components/Loader";
 
 const Dashboard = () => {
     const { user, logOut } = useAuth();
     const [isDeliveryMen] = useDeliveryMen();
-    const [isAdmin] = useAdmin();
+    const [isAdmin, isAdminLoading] = useAdmin();
     const navigate = useNavigate();
+
 
     // Navigate to the appropriate page based on the user's role
     useEffect(() => {
@@ -31,6 +32,9 @@ const Dashboard = () => {
         }
     }, [isAdmin, isDeliveryMen, navigate]);
 
+    if (isAdminLoading) {
+        return <Loader></Loader>
+    }
 
     const handleSignOut = () => {
         logOut()
@@ -41,78 +45,85 @@ const Dashboard = () => {
         <div>
             <div className="flex m-auto max-w-7xl overflow-x-auto">
                 {/* dashboard side bar */}
-                <div className="w-72 min-h-screen bg-teal-400">
-                    <ul className="menu">
+                <div className=" w-72 min-h-screen bg-teal-400" style={{ position: 'sticky', top: 0 }}>
+                    <ul className="menu" >
 
                         {
-                            isAdmin ?
-                                <>
-                                    <div className="mb-10 font-bold text-xl flex  flex-col justify-center items-center space-x-2 py-4  text-black">
-                                        <FaHome></FaHome>
-                                        <p className="text-red-700 pr-1 underline-offset-8 underline">{user.displayName}</p>
-                                    </div>
-                                    <li>
+                            isAdmin &&
+                            <>
+                                <div className="mb-10 font-bold text-xl flex  flex-col justify-center items-center space-x-2 py-4  text-black">
+                                    <FaHome></FaHome>
+                                    <p className="text-red-700 pr-1 underline-offset-8 underline">{user.displayName}</p>
+                                </div>
+                                <li>
 
-                                        <NavLink to="/dashboard/allParcels">
-                                            <LuBoxes></LuBoxes>
-                                            All Parcels</NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to="/dashboard/allUsers">
-                                            <FaUsers></FaUsers>
-                                            All Users</NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to="/dashboard/allDeliveryMen">
-                                            <TbTruckDelivery></TbTruckDelivery>
-                                            All Delivery Man</NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to="/dashboard/statistics">
-                                            <IoStatsChart></IoStatsChart>
-                                            Statistics</NavLink>
-                                    </li>
-                                </>
-                                : isDeliveryMen ?
-                                    <>
-                                        <div className="mb-10 font-bold text-xl flex  flex-col justify-center items-center space-x-2 py-4  text-black">
-                                            <FaHome></FaHome>
-                                            <p className="text-red-700 pr-1 underline-offset-8 underline">{user.displayName}</p>
-                                        </div>
-                                        <li>
-                                            <NavLink to="/dashboard/deliveryList">
-                                                <FaThList></FaThList>
-                                                Delivery List</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to="/dashboard/myReviews">
-                                                <FaStar ></FaStar >
-                                                My Reviews</NavLink>
-                                        </li>
-                                    </>
-                                    :
-                                    <>
-                                        <div className="mb-10 font-bold text-xl flex  flex-col justify-center items-center space-x-2 py-4  text-black">
-                                            <FaHome></FaHome>
-                                            <p className="text-red-700 pr-1 underline-offset-8 underline">{user.displayName}</p>
-                                        </div>
-                                        <li>
-                                            <NavLink to="/dashboard/userProfile">
-                                                <ImProfile></ImProfile>
-                                                My Profile</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to="/dashboard/userParcels">
-                                                <FaBoxesPacking></FaBoxesPacking>
-                                                My Parcels</NavLink>
-                                        </li>
-                                        <li>
-                                            <NavLink to="/dashboard/bookAParcel">
-                                                <MdBorderColor></MdBorderColor>
-                                                Book A Parcel</NavLink>
-                                        </li>
-                                    </>
+                                    <NavLink to="/dashboard/allParcels">
+                                        <LuBoxes></LuBoxes>
+                                        All Parcels</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/dashboard/allUsers">
+                                        <FaUsers></FaUsers>
+                                        All Users</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/dashboard/allDeliveryMen">
+                                        <TbTruckDelivery></TbTruckDelivery>
+                                        All Delivery Man</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/dashboard/statistics">
+                                        <IoStatsChart></IoStatsChart>
+                                        Statistics</NavLink>
+                                </li>
+                            </>
                         }
+
+                        {isDeliveryMen &&
+                            <>
+                                <div className="mb-10 font-bold text-xl flex  flex-col justify-center items-center space-x-2 py-4  text-black">
+                                    <FaHome></FaHome>
+                                    <p className="text-red-700 pr-1 underline-offset-8 underline">{user.displayName}</p>
+                                </div>
+                                <li>
+                                    <NavLink to="/dashboard/deliveryList">
+                                        <FaThList></FaThList>
+                                        Delivery List</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/dashboard/myReviews">
+                                        <FaStar ></FaStar >
+                                        My Reviews</NavLink>
+                                </li>
+                            </>
+                        }
+
+                        {
+                            !isAdmin && !isDeliveryMen &&
+                            <>
+                                <div className="mb-10 font-bold text-xl flex  flex-col justify-center items-center space-x-2 py-4  text-black">
+                                    <FaHome></FaHome>
+                                    <p className="text-red-700 pr-1 underline-offset-8 underline">{user.displayName}</p>
+                                </div>
+                                <li>
+                                    <NavLink to="/dashboard/userProfile">
+                                        <ImProfile></ImProfile>
+                                        My Profile</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/dashboard/userParcels">
+                                        <FaBoxesPacking></FaBoxesPacking>
+                                        My Parcels</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/dashboard/bookAParcel">
+                                        <MdBorderColor></MdBorderColor>
+                                        Book A Parcel</NavLink>
+                                </li>
+                            </>
+
+                        }
+
 
 
 

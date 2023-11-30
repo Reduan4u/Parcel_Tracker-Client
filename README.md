@@ -26,3 +26,16 @@ Top 5 main Features of This Project:
   - Email or SMS notifications for users about parcel status updates, estimated delivery times, and delivery confirmations.
   - In-app messaging or chat functionality for users to communicate with customer support or delivery personnel.
 
+
+
+
+Submitted Info:
+
+1. Assignment Category: assignment12_category_0015
+2. Admin email: parcel.tracker.admin1@gmail.com
+3. Admin password: Asdfgh!1
+4. Delivery Men’s email: deliveryman1.pt@gmail.com
+5. Delivery Men’s password: Asdfgh!1
+6. Front-end Live Site Link: https://parcel-tracker-8ab9f.web.app/
+7. Client-Side Github Repository Link: https://github.com/programming-hero-web-course1/b8a12-client-side-Reduan4u
+8. Server-Side Github Repository Link: https://github.com/programming-hero-web-course1/b8a12-server-side-Reduan4u
