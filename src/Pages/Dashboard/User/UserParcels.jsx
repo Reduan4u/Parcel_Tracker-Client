@@ -59,8 +59,8 @@ const UserParcels = () => {
                     axiosPublic.patch(`/parcel/reviewed/${parcelsId}`)
                         .then(res => {
                             console.log(res.data);
+                            refetch();
                         })
-                    refetch();
                     Swal.fire({
                         position: "top-end",
                         icon: "success",

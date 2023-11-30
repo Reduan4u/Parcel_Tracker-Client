@@ -1,6 +1,7 @@
 import Swal from 'sweetalert2';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
 const AllUser = () => {
     const axiosSecure = useAxiosSecure();
@@ -17,6 +18,17 @@ const AllUser = () => {
         },
 
     });
+    const [currentPage, setCurrentPage] = useState(1);
+    const usersPerPage = 5;
+
+    // Get current users
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+    const paginate = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
 
     const makeDeliveryMan = (user) => {
         axiosSecure.patch(`/users/deliveryMen/${user._id}`)
@@ -34,7 +46,6 @@ const AllUser = () => {
                 }
             })
     };
-
     const makeAdmin = (user) => {
         axiosSecure.patch(`/users/admin/${user._id}`)
             .then(res => {
@@ -67,7 +78,7 @@ const AllUser = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map((user, index) => (
+                    {currentUsers.map((user, index) => (
                         <tr key={user._id}>
                             <td className="border px-2 py-2">{index + 1}</td>
                             <td className="border px-2 py-2">{user.name}</td>
@@ -97,21 +108,20 @@ const AllUser = () => {
 
 
 
-            {/* <div className="mt-4">
+            <div className="mt-4">
                 <ul className="flex justify-center space-x-2">
                     {Array.from({ length: Math.ceil(users.length / usersPerPage) }, (_, index) => (
                         <li key={index}>
                             <button
                                 onClick={() => paginate(index + 1)}
-                                className="px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded"
+                                className={`px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : ''}`}
                             >
                                 {index + 1}
                             </button>
                         </li>
                     ))}
                 </ul>
-            </div> */}
-
+            </div>
 
         </div>
     );
