@@ -47,11 +47,12 @@ const Dashboard = () => {
                         {
                             isAdmin ?
                                 <>
-                                    <div className="mb-10 font-bold text-xl flex justify-center items-center space-x-2 py-4 underline-offset-8 underline text-black">
+                                    <div className="mb-10 font-bold text-xl flex  flex-col justify-center items-center space-x-2 py-4  text-black">
                                         <FaHome></FaHome>
-                                        <p><span className="text-red-700 underline-offset-8 underline pr-1">Admin</span> Home</p>
+                                        <p className="text-red-700 pr-1 underline-offset-8 underline">{user.displayName}</p>
                                     </div>
                                     <li>
+
                                         <NavLink to="/dashboard/allParcels">
                                             <LuBoxes></LuBoxes>
                                             All Parcels</NavLink>
@@ -74,9 +75,9 @@ const Dashboard = () => {
                                 </>
                                 : isDeliveryMen ?
                                     <>
-                                        <div className="mb-10 font-bold text-xl flex justify-center items-center space-x-2 py-4 underline-offset-8 underline text-black">
+                                        <div className="mb-10 font-bold text-xl flex  flex-col justify-center items-center space-x-2 py-4  text-black">
                                             <FaHome></FaHome>
-                                            <p><span className="text-red-700 underline-offset-8 underline pr-1">Delivery Man</span>  Home</p>
+                                            <p className="text-red-700 pr-1 underline-offset-8 underline">{user.displayName}</p>
                                         </div>
                                         <li>
                                             <NavLink to="/dashboard/deliveryList">
@@ -91,9 +92,9 @@ const Dashboard = () => {
                                     </>
                                     :
                                     <>
-                                        <div className="mb-10 font-bold text-xl flex justify-center items-center space-x-2 py-4 underline-offset-8 underline text-black">
+                                        <div className="mb-10 font-bold text-xl flex  flex-col justify-center items-center space-x-2 py-4  text-black">
                                             <FaHome></FaHome>
-                                            <p><span className="text-red-700 underline-offset-8 underline pr-1">{user.displayName}</span>  Home</p>
+                                            <p className="text-red-700 pr-1 underline-offset-8 underline">{user.displayName}</p>
                                         </div>
                                         <li>
                                             <NavLink to="/dashboard/userProfile">

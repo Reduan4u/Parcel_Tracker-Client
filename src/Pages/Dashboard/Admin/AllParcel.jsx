@@ -150,7 +150,7 @@ const AllParcel = () => {
                         <th className="border px-2 py-2">User's Name</th>
                         <th className="border px-2 py-2">User's Phone</th>
                         <th className="border px-2 py-2">Booking Date</th>
-                        <th className="border px-2 py-2">Requested Delivery Date</th>
+                        <th className="border px-2 py-2">Requested Date</th>
                         <th className="border px-2 py-2">Cost</th>
                         <th className="border px-2 py-2">Status</th>
                         <th className="border px-2 py-2">Manage</th>

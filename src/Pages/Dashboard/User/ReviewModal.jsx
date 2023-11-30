@@ -1,3 +1,4 @@
+import { Rating } from '@smastrom/react-rating';
 import { useState } from 'react';
 import Modal from 'react-modal';
 
@@ -46,16 +47,14 @@ const ReviewModal = ({ isOpen, onClose, onSubmit, dmId, name, image }) => {
                         onChange={(e) => setFeedback(e.target.value)}
                     />
                 </div>
-                <div className='space-x-4 flex justify-between'>
-                    <div className=' space-x-4'>
-                        <label className=' font-semibold'>Rating out of 5:</label>
-                        <input
-                            className=' rounded-lg p-2 w-10'
-                            type="number"
-                            min="0"
-                            max="5"
+                <div className='space-x-2 flex justify-between'>
+                    <div className='flex items-center  space-x-4'>
+                        <label className=' font-semibold'>Rating:</label>
+                        <Rating
+                            style={{ maxWidth: 180 }}
                             value={rating}
-                            onChange={(e) => setRating(e.target.value)}
+                            onChange={setRating}
+
                         />
                     </div>
                     <button className='btn btn-secondary' onClick={handleSubmit}>Submit</button>

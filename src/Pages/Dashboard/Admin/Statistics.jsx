@@ -23,7 +23,7 @@ const Statistics = () => {
     });
 
 
-    /* useEffect(() => {
+    useEffect(() => {
         // Fetch data for the bar chart
         axiosSecure.get('/bookingsByDate')
             .then(response => {
@@ -56,7 +56,7 @@ const Statistics = () => {
             .catch(error => {
                 console.error('Error fetching bookings by date:', error);
             });
-    }, [axiosSecure]); */
+    }, [axiosSecure]);
 
     return (
         <div className=''>

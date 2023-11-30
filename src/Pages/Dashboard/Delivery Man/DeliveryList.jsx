@@ -2,9 +2,8 @@ import useAuth from '../../../Hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 import useAxiosPublic from '../../../Hooks/useAxiosPublic';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-const position = [51., -0.9]
+import Map from 'react-map-gl';
+import { useState } from 'react';
 
 
 const DeliveryList = () => {
@@ -22,6 +21,13 @@ const DeliveryList = () => {
         },
     });
     //console.log(deliveryParcels);
+
+    const handleViewLocation = (longitude, latitude) => {
+        setSelectedParcel({ longitude: Number(longitude), latitude: Number(latitude) });
+
+        const modal = document.getElementById('my_modal_4');
+        modal.showModal();
+    };
 
     const handleCancel = (parcelId) => {
         Swal.fire({
@@ -71,7 +77,8 @@ const DeliveryList = () => {
                 }
             })
     };
-
+    const [selectedParcel, setSelectedParcel] = useState(null);
+    console.log(selectedParcel);
     return (
         <div className="container mx-auto mt-8">
             <h2 className="text-4xl font-bold mb-4">My Delivery List</h2>
@@ -106,16 +113,14 @@ const DeliveryList = () => {
                                 <td className="border">{parcel.approximateDeliveryDate}</td>
                                 <td className="border">{parcel.bookingStatus}</td>
                                 <td className="border py-2 flex flex-col space-y-1">
-                                    {/* Add view location button logic here */}
 
                                     {/* Add view location button logic here */}
                                     <button
                                         className="bg-blue-500 hover:bg-blue-700 text-white px-2 py-1 rounded"
-                                        onClick={() => document.getElementById('my_modal_4').showModal()}
+                                        onClick={() => handleViewLocation(parcel.addressLongitude, parcel.addressLatitude)}
                                     >
                                         Location
                                     </button>
-
 
                                     {
                                         parcel.bookingStatus === "On The Way" ? <button
@@ -126,51 +131,52 @@ const DeliveryList = () => {
                                         </button> : ""
                                     }
 
-
                                     {
                                         parcel.bookingStatus === "On The Way" ? <button className="bg-green-500 hover:bg-green-700 text-white px-2 py-1 rounded"
                                             onClick={() => handleDeliver(parcel._id, parcel.deliveryMenId)}>Deliver</button> : ""
                                     }
 
                                 </td>
+
                             </tr>
                         ))}
                     </tbody>
                 </table>
-            </div> :
+            </div>
+                :
                 <div>
                     <h1 className='text-5xl text-center font-bold mt-20 text-red-500'>No Parcel to Deliver!</h1>
-                </div>}
+                </div>
+            }
 
             {/* Map Modal */}
-
-            {/* You can open the modal using document.getElementById('ID').showModal() method */}
             <dialog id="my_modal_4" className="modal">
-                <div className="modal-box w-11/12 max-w-5xl">
+                <div className="modal-box  max-w-5xl">
+                    {/* Map container */}
+                    <div className='w-full flex justify-center items-center overflow-hidden'>
+                        {selectedParcel && (
+                            <Map
+                                mapLib={import('mapbox-gl')}
+                                latitude={selectedParcel.latitude}
+                                longitude={selectedParcel.longitude}
+                                zoom={4}
 
-                    <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
-                        <TileLayer
-                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        />
-                        <Marker position={position}>
-                            <Popup>
-                                A pretty CSS3 popup. <br /> Easily customizable.
-                            </Popup>
-                        </Marker>
-                    </MapContainer>
+
+                                style={{ width: 600, height: 400 }}
+                                mapboxAccessToken='pk.eyJ1IjoicmVkdWFuNHUiLCJhIjoiY2xwbDRsY25jMDE2cTJrbXBtcDllNWl0ayJ9.i1UG45Gf4S6ceesLt3fcmg'
+                                mapStyle="mapbox://styles/mapbox/streets-v9"
+                            />
+                        )}
+                    </div>
 
                     <div className="modal-action flex justify-center">
-                        <form method="dialog ">
-                            {/* if there is a button, it will close the modal */}
-                            <button className="btn">Close</button>
+                        <form method="dialog">
+                            {/* If there is a button, it will close the modal */}
+                            <button className="btn" onClick={() => setSelectedParcel(null)}>Close</button>
                         </form>
                     </div>
                 </div>
             </dialog>
-
-
-
 
         </div >
     );

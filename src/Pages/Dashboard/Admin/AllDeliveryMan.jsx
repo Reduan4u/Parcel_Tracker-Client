@@ -1,3 +1,4 @@
+import { Rating } from '@smastrom/react-rating';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
 
@@ -15,6 +16,8 @@ const AllDeliveryMan = () => {
         },
 
     });
+
+
     // console.log(deliveryMen);
     return (
         <div className="container mx-auto mt-8">
@@ -30,16 +33,34 @@ const AllDeliveryMan = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {deliveryMen.map((deliveryMan, index) => (
-                        <tr key={deliveryMan._id}>
-                            <td className="border px-2 py-2">{index + 1}</td>
-                            <td className="border px-2 py-2">{deliveryMan.name}</td>
-                            <td className="border px-2 py-2">{deliveryMan.email}</td>
-                            <td className="border px-2 py-2 text-center">{deliveryMan.deliveryCount ? deliveryMan.deliveryCount : "00"}</td>
-                            {/* Logic to calculate average review */}
-                            <td className="border px-2 py-2">{/* Display average review */}</td>
-                        </tr>
-                    ))}
+                    {deliveryMen.map((deliveryMan, index) => {
+                        // Calculate average review rating
+                        const averageRating = deliveryMan.reviews.length > 0
+                            ? deliveryMan.reviews.reduce((sum, review) => sum + review.rating, 0) / deliveryMan.reviews.length
+                            : 0;
+
+                        return (
+                            <tr key={deliveryMan._id}>
+                                <td className="border px-2 py-2">{index + 1}</td>
+                                <td className="border px-2 py-2">{deliveryMan.name}</td>
+                                <td className="border px-2 py-2">{deliveryMan.email}</td>
+                                <td className="border px-2 py-2 text-center">{deliveryMan.deliveryCount ? deliveryMan.deliveryCount : "0"}</td>
+                                <td className="border px-2 py-2 text-center">{averageRating ?
+                                    <><Rating
+                                        style={{ maxWidth: 180 }}
+                                        value={averageRating}
+                                        readOnly
+                                    /></>
+                                    :
+                                    <><Rating
+                                        style={{ maxWidth: 180 }}
+                                        value=""
+                                        readOnly
+                                    /></>}</td>
+                            </tr>
+                        );
+                    })}
+
                 </tbody>
             </table>
         </div>

@@ -35,12 +35,12 @@ const TopDeliveryMan = () => {
                     heading2={"top Delivery man"} subHeading={"Every feature you need to manage incoming and outgoing parcels."}>  </SectionTitle>
             </div>
             <div className="grid md:grid-cols-3 gap-10  w-11/12 max-w-7xl mx-auto my-10">
-                {/* {
+                {
                     topDeliveryMen.map(deliveryMan => <DeliveryManCard
                         key={deliveryMan._id}
                         deliveryMan={deliveryMan}
                     ></DeliveryManCard>)
-                } */}
+                }
 
             </div>
 

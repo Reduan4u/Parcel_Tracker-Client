@@ -25,3 +25,4 @@ Top 5 main Features of This Project:
 5. Communication and Notifications:
   - Email or SMS notifications for users about parcel status updates, estimated delivery times, and delivery confirmations.
   - In-app messaging or chat functionality for users to communicate with customer support or delivery personnel.
+

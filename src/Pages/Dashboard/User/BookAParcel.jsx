@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import { Navigate } from "react-router-dom";
 
 const BookAParcel = () => {
     const { user } = useAuth();

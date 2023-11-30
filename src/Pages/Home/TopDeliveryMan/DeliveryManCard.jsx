@@ -27,15 +27,16 @@ const DeliveryManCard = ({ deliveryMan }) => {
             <section className=" bg-teal-500 rounded-lg">
                 <div className="container flex flex-col items-center justify-center p-4 mx-auto sm:p-10">
                     <div className="flex flex-col justify-center w-full px-4 mx-2 my-12 rounded-md  bg-base-100 text-start ">
-                        <img alt="" className="self-center flex-shrink-0 w-24 h-24 -mt-12 bg-center bg-cover rounded-full" src={image} />
+                        <img alt="" className="self-center flex-shrink-0 w-32 h-auto -mt-12 bg-center bg-cover rounded-full" src={image} />
                         <div className="flex-1 my-4 ">
-                            <p className="text-xl font-semibold leadi flex justify-between">Name: <span className="font-bold text-red-400">{name}</span></p>
-                            <div className="text-xl font-semibold flex justify-between"> Rating:<Rating
+                            <p className="text-xl font-semibold leadi flex space-x-2"><span>Name:</span> <span className="font-bold text-red-400">{name}</span></p>
+                            <div className="text-xl font-semibold flex "> Ratings:<Rating
+                                className='pl-2'
                                 style={{ maxWidth: 100 }}
-                                value={4.7}
+                                value={averageRating}
                                 readOnly
                             /></div>
-                            <div className="text-xl font-semibold flex justify-between"><span>Parcel Delivered:</span> <span className="font-bold text-red-400 ">{deliveryCount} </span>
+                            <div className="text-xl font-semibold space-x-2"><span>Delivered:</span> <span className="font-bold text-red-400 ">{deliveryCount} </span>
                             </div>
 
 
